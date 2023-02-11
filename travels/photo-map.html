@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>My Travels | J Luke Griles</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+<link rel="stylesheet" href="photo-locations/style.css">
+<script src="../assets/mini-earth/miniature.earth.js"></script>
+
+<script>
+
+window.addEventListener( "earthjsload", function() {
+
+
+	myearth = new Earth( 'myearth', {
+
+		location: { lat: 36, lng: -80 },
+		light: 'none',		
+		mapLandColor : '#223b05',
+		mapSeaColor : '#005477'
+		
+	} );
+	
+	
+	var photos = [
+		{ location: { lat: -0.8, lng: 35.4 }, src: 'photo-locations/kenya.jpg' },
+		{ location: { lat: 32.6882468, lng: -117.1842271 }, src: 'photo-locations/coronado.jpg' },
+		{ location: { lat: 37.3, lng: -78 }, src: 'photo-locations/cob-house.jpeg' },
+		{ location: { lat: -12, lng: -77 }, src: 'photo-locations/lima.jpg' },
+		{ location: { lat: -13.1, lng: -72.5 }, src: 'photo-locations/peru.jpg' },
+		{ location: { lat: 48.4, lng: -78.4 }, src: 'photo-locations/canada.jpeg' },
+		{ location: { lat: 55.2, lng: -6.5 }, src: 'photo-locations/giants-causeway.jpg' },
+		{ location: { lat: 52.5, lng: -7.9 }, src: 'photo-locations/rock-of-cashel.jpg' },
+		{ location: { lat: 51.499, lng: -0.1286 }, src: 'photo-locations/westminster.jpg' },
+		{ location: { lat: 41.8, lng: -87.9 }, src: 'photo-locations/chicago.jpg' },
+		{ location: { lat: 43.7, lng: -102.7 }, src: 'photo-locations/badlands.jpeg' },
+		{ location: { lat: 44.6, lng: -111.1 }, src: 'photo-locations/yellowstone.jpg' },
+		{ location: { lat: 38.5, lng: -100.1 }, src: 'photo-locations/kansas.jpeg' },
+		{ location: { lat: 37.8, lng: -105.8 }, src: 'photo-locations/sand-dunes.jpeg' },
+		{ location: { lat: 38.7, lng: -98.4 }, src: 'photo-locations/missouri.jpeg' },
+		{ location: { lat: 40.78, lng: -73.96 }, src: 'photo-locations/central-park.jpg' },
+		{ location: { lat: 59.89, lng: 10.6 }, src: 'photo-locations/oslo.jpg' },
+		{ location: { lat: 67.3, lng: 14.4 }, src: 'photo-locations/bodo.jpg' },
+		{ location: { lat: 45.9, lng: -68.9 }, src: 'photo-locations/katahdin.jpg' },
+		{ location: { lat: 55.6, lng: 12.5 }, src: 'photo-locations/nyhavn.jpg' },
+		{ location: { lat: 64.1, lng: -21.9 }, src: 'photo-locations/reyk.jpg' },
+		{ location: { lat: 35.1, lng: -90.2 }, src: 'photo-locations/memphis.jpg' },
+		{ location: { lat: 22.4, lng: 114 }, src: 'photo-locations/hong-kong.jpg' },
+		{ location: { lat: -37.9, lng: 145 }, src: 'photo-locations/brighton.jpg' },
+		{ location: { lat: 33.2, lng: 121.2 }, src: 'photo-locations/shanghai.jpg' },
+		{ location: { lat: 48.9, lng: 2.3 }, src: 'photo-locations/paris.jpg' },
+		{ location: { lat: 46.7, lng: 7.8 }, src: 'photo-locations/interlaken.jpg' },
+		{ location: { lat: 52.4, lng: 4.8 }, src: 'photo-locations/amsterdam.jpeg' },
+		{ location: { lat: 26.3, lng: -80.2 }, src: 'photo-locations/lauderdale.jpeg' },
+
+		];
+	
+	
+	myearth.addEventListener( "ready", function() {
+	
+		// add photo overlay
+		
+		photo_overlay = this.addOverlay( {
+			content: '<div id="photo"><div id="close-photo" onclick="closePhoto(); event.stopPropagation();"></div></div>',
+			visible: false,
+			containerScale: 1,
+			depthScale: 0.5
+		} );	
+	
+
+		// add photo pins
+		
+		for ( var i=0; i < photos.length; i++ ) {
+		
+			var marker = this.addMarker( {
+			
+				mesh : ["Pin", "Needle"],
+				color: (i % 2 == 0) ? '#F28500' : '#F28500',
+				location : photos[i].location,
+				scale: 0.01,
+				offset: 1.6,
+				visible: false,
+				transparent: false,
+				hotspot: true,
+				hotspotRadius : 0.75,
+				hotspotHeight : 1.3,						
+				
+				// custom property
+				photo_info: photos[i]
+				
+			} );
+			
+			marker.addEventListener('click', openPhoto);
+			
+			// animate marker
+			setTimeout( (function() {
+				this.visible = true;
+				this.animate( 'scale', 0.9, { duration: 140 } );
+				this.animate( 'offset', 0, { duration: 1100, easing: 'bounce' } );
+			}).bind(marker), 280 * i );
+			
+		}
+		
+
+	} );
+	
+	
+	
+	// close photo overlay when navigating away
+	
+	myearth.addEventListener( "change", function() {
+		
+		if ( ! current_marker || auto_rotate ) return;
+
+		if ( Earth.getAngle( myearth.location, current_marker.location ) > 45 ) {
+			closePhoto();
+		}
+		
+	} );
+	
+
+} );
+
+
+
+var current_marker, auto_rotate;
+
+
+function openPhoto() {
+
+	// close current photo
+	if ( current_marker ) {
+		
+		closePhoto();
+		window.setTimeout( openPhoto.bind(this), 120 );
+		
+		return;
+	}
+	
+	// rotate earth if needed
+	if ( myearth.goTo( this.location, { relativeDuration: 100, approachAngle: 12, end: function(){auto_rotate=false;} } ) ) {
+		auto_rotate = true;
+	}
+	
+	
+	document.getElementById('photo').style.backgroundImage = "url("+ this.photo_info.src +")";
+	
+	photo_overlay.location = this.location;
+	photo_overlay.visible = true;
+	
+	setTimeout( function(){
+		document.getElementById('photo').className = 'photo-appear';
+	}, 120);
+	
+	this.animate( 'scale', 0.001, { duration: 150 } );
+	current_marker = this;
+	
+}
+
+function closePhoto() {
+
+	if ( ! current_marker ) return;
+	
+	document.getElementById('photo').className = '';
+	
+	setTimeout( (function(){
+		document.getElementById('photo').style.backgroundImage = 'none';
+		photo_overlay.visible = false;
+		this.opacity = 0.7;
+		this.animate( 'scale', 1, { duration: 150 } );
+	}).bind(current_marker), 100 );
+	
+	current_marker = false;
+	
+}
+
+
+</script>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+	<div id="wrapper-in">
+	
+		<div id="myearth"></div>
+		
+	</div><!--wrapper-in-->
+</div><!--wrapper-->
+
+
+
+</body>
+</html>

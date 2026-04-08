@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Information Network Map</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: hidden; background: #0a0a0a; color: #e0e0e0; }
+    #canvas-container { width: 100vw; height: 100vh; position: relative; }
+    
+    #info-panel { 
+      position: absolute; 
+      top: 10px; 
+      left: 10px; 
+      background: rgba(20, 20, 20, 0.95); 
+      padding: 15px; 
+      border-radius: 8px; 
+      max-width: 300px; 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      backdrop-filter: blur(10px);
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    #info-panel h1 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #fff; }
+    #info-panel p { font-size: 0.85rem; line-height: 1.4; opacity: 0.8; margin-bottom: 0.75rem; }
+    
+    .legend { margin-top: 0.75rem; }
+    .legend-toggle {
+      cursor: pointer;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+    .legend-content { display: none; }
+    .legend-content.active { display: block; }
+    .legend-content ul { padding-left: 1.2rem; opacity: 0.9; }
+    .legend-content li { margin-bottom: 0.25rem; }
+    .legend-item { display: flex; align-items: center; margin-bottom: 0.5rem; font-size: 0.8rem; }
+    .legend-color { width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; flex-shrink: 0; }
+    
+    #node-detail { 
+      position: absolute; 
+      bottom: 10px; 
+      left: 10px; 
+      right: 10px; 
+      background: rgba(20, 20, 20, 0.98); 
+      padding: 15px; 
+      border-radius: 8px; 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      display: none; 
+      max-height: 40vh; 
+      overflow-y: auto;
+    }
+    
+    #node-detail h2 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #fff; }
+    #node-detail .node-type { font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    #node-detail p { font-size: 0.85rem; line-height: 1.4; margin-bottom: 0.75rem; }
+    #node-detail a { 
+      display: inline-block;
+      color: #4a9eff; 
+      text-decoration: none; 
+      font-size: 0.85rem; 
+      padding: 0.5rem 1rem;
+      background: rgba(74, 158, 255, 0.1);
+      border-radius: 4px;
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      margin-right: 0.5rem;
+    }
+    #node-detail a:active { background: rgba(74, 158, 255, 0.2); }
+    
+    #category-summary {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(20, 20, 20, 0.98);
+      padding: 25px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: none;
+      max-width: 500px;
+      max-height: 70vh;
+      overflow-y: auto;
+      z-index: 2000;
+    }
+    
+    #category-summary h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+    
+    #category-summary .summary-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+    
+    #category-summary .sources-list {
+      margin-top: 1rem;
+    }
+    
+    #category-summary .source-item {
+      padding: 0.5rem;
+      margin-bottom: 0.3rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    
+    #category-summary .source-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    #category-summary .source-name {
+      font-weight: 600;
+      color: #4a9eff;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #controls { 
+      position: absolute; 
+      top: 10px; 
+      right: 10px; 
+      background: rgba(20, 20, 20, 0.95); 
+      padding: 12px; 
+      border-radius: 8px; 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      font-size: 0.8rem;
+    }
+    #controls p { margin-bottom: 0.4rem; opacity: 0.7; }
+    
+    #search-container {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;
+    }
+    
+    #search-input {
+      width: 100%;
+      padding: 10px 15px;
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+    
+    #search-results {
+      margin-top: 5px;
+      background: rgba(20, 20, 20, 0.98);
+      border-radius: 8px;
+      max-height: 50vh;
+      overflow-y: auto;
+      display: none;
+    }
+    
+    .search-result {
+      padding: 10px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+    }
+    .search-result:hover, .search-result:active {
+      background: rgba(255,255,255,0.05);
+    }
+    .search-result-name {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .search-result-desc {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    
+    #category-summary {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(20, 20, 20, 0.98);
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: none;
+      max-width: 500px;
+      max-height: 70vh;
+      overflow-y: auto;
+      z-index: 2000;
+    }
+    
+    #category-summary h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+    
+    #category-summary .summary-stats {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    #category-summary .summary-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+    
+    #category-summary .sources-list {
+      margin-top: 1rem;
+    }
+    
+    #category-summary .source-item {
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 4px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+    
+    #category-summary .source-item:hover {
+      background: rgba(255,255,255,0.08);
+    }
+    
+    #category-summary .source-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    #category-summary .source-desc {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    
+    .close-btn-large {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 300;
+    }
+    
+    .close-btn-large:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    #category-filter {
+      position: absolute;
+      top: 80px;
+      right: 10px;
+      background: rgba(20, 20, 20, 0.95);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.8rem;
+      max-height: 60vh;
+      overflow-y: auto;
+      max-width: 200px;
+    }
+    
+    .filter-toggle {
+      cursor: pointer;
+      padding: 0.4rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      margin-bottom: 0.4rem;
+      user-select: none;
+      font-size: 0.75rem;
+    }
+    
+    .filter-content {
+      display: none;
+      margin-top: 0.5rem;
+    }
+    
+    .filter-content.active {
+      display: block;
+    }
+    
+    .category-checkbox {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.3rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0.2rem;
+    }
+    
+    .category-checkbox input {
+      margin-right: 0.4rem;
+    }
+    
+    .category-checkbox:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    
+    #node-tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      pointer-events: none;
+      display: none;
+      z-index: 1000;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      #info-panel { 
+        max-width: calc(100vw - 20px);
+        font-size: 0.85rem;
+      }
+      #controls {
+        font-size: 0.75rem;
+        padding: 8px;
+      }
+      #search-container {
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="Search sources..." />
+    <div id="search-results"></div>
+  </div>
+  
+  <div id="info-panel">
+    <h1>Global Information Network</h1>
+    <p>160 sources worldwide. Search or tap nodes for details.</p>
+    
+    <div class="legend">
+      <div class="legend-toggle" onclick="toggleLegend()">📊 Legend (tap to show/hide)</div>
+      <div class="legend-content" id="legend-content">
+        <div class="legend-item"><div class="legend-color" style="background: #2a9d8f;"></div><span>Primary Sources</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #457b9d;"></div><span>Analysis</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #e76f51;"></div><span>Community</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #f4a261;"></div><span>Institutional</span></div>
+      </div>
+    </div>
+    
+    <div class="reflexivity" style="margin-top: 1rem;">
+      <div class="legend-toggle" onclick="toggleReflexivity()">⚠️ Positionality (tap to read)</div>
+      <div class="legend-content" id="reflexivity-content" style="line-height: 1.5; font-size: 0.8rem;">
+        <p style="margin-top: 0.5rem;"><strong>Created by:</strong> Claude (Anthropic AI), trained primarily on English-language, Western sources through early 2025.</p>
+        
+        <p style="margin-top: 0.5rem;"><strong>Systematic biases:</strong></p>
+        <ul style="margin-left: 1rem; margin-top: 0.25rem;">
+          <li>Overrepresents sources I encountered in training data</li>
+          <li>English-language bias (many regional sources in local languages missing)</li>
+          <li>Institutional bias (formal organizations over grassroots movements)</li>
+          <li>Digital bias (online sources over offline knowledge systems)</li>
+          <li>Recency bias (contemporary platforms over historical institutions)</li>
+        </ul>
+        
+        <p style="margin-top: 0.5rem;"><strong>Major gaps:</strong> Sub-Saharan African platforms beyond South Africa, Pacific Islander sources, indigenous knowledge networks, non-indexed/private communities, oral traditions, local/regional sources in non-dominant languages, grassroots movements without formal web presence.</p>
+        
+        <p style="margin-top: 0.5rem;"><strong>Selection criteria:</strong> Scale (user base/reach), institutional legitimacy, accessibility (has a URL), my awareness of existence. These criteria themselves encode Western/Northern epistemological assumptions.</p>
+        
+        <p style="margin-top: 0.5rem;"><strong>Use critically:</strong> This map reflects what an AI trained on predominantly Western sources thinks is important globally. It's a starting point for awareness, not an authoritative catalog. Missing sources aren't less important—they're outside my epistemic frame.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div id="controls">
+    <p>🔄 Drag to rotate</p>
+    <p>🔍 Pinch to zoom</p>
+  </div>
+  
+  <div id="category-filter">
+    <div class="filter-toggle" onclick="toggleFilter()">🎯 Filter Categories</div>
+    <div class="filter-content" id="filter-content">
+      <div style="margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <label class="category-checkbox">
+          <input type="checkbox" id="select-all" checked onchange="toggleAllCategories()">
+          <span>Select All</span>
+        </label>
+      </div>
+      <div id="category-checkboxes"></div>
+    </div>
+  </div>
+  
+  <div id="node-detail">
+    <button class="close-btn" onclick="closeDetail()">✕</button>
+  </div>
+  
+  <div id="category-summary">
+    <button class="close-btn-large" onclick="closeCategorySummary()">✕</button>
+    <div id="category-summary-content"></div>
+  </div>
+  
+  <div id="node-tooltip"></div>
+
+  <script>
+const nodes = [
+// ACADEMIC - WESTERN
+{id:1,name:"Nature",type:"primary",category:"Academic",description:"Leading science journal. Peer-reviewed research.",url:"https://nature.com",connections:[2,3,180]},
+{id:2,name:"Science",type:"primary",category:"Academic",description:"AAAS journal. Multidisciplinary science.",url:"https://science.org",connections:[1,3,180]},
+{id:3,name:"arXiv",type:"primary",category:"Academic",description:"Preprint repository. Physics, math, CS.",url:"https://arxiv.org",connections:[1,2]},
+{id:4,name:"PubMed",type:"primary",category:"Academic",description:"NIH biomedical literature database.",url:"https://pubmed.gov",connections:[5,6]},
+{id:5,name:"NEJM",type:"primary",category:"Academic",description:"New England Journal of Medicine.",url:"https://nejm.org",connections:[4,6]},
+{id:6,name:"The Lancet",type:"primary",category:"Academic",description:"British medical journal. Est. 1823.",url:"https://thelancet.com",connections:[4,5]},
+{id:7,name:"JSTOR",type:"primary",category:"Academic",description:"Digital library. Journals and books.",url:"https://jstor.org",connections:[8,181]},
+{id:8,name:"Google Scholar",type:"primary",category:"Academic",description:"Scholarly literature search.",url:"https://scholar.google.com",connections:[7,9]},
+{id:9,name:"SSRN",type:"primary",category:"Academic",description:"Social science working papers.",url:"https://ssrn.com",connections:[7,8]},
+// ACADEMIC - NON-WEIRD
+{id:180,name:"Chinese Academy of Sciences",type:"primary",category:"Academic",description:"China's national academy. Major research.",url:"http://english.cas.cn",connections:[1,2,182]},
+{id:181,name:"SciELO",type:"primary",category:"Academic",description:"Latin American academic journals.",url:"https://scielo.org",connections:[7,185]},
+{id:182,name:"Tsinghua University",type:"institutional",category:"Academic",description:"Leading Chinese research university.",url:"https://tsinghua.edu.cn",connections:[180,183]},
+{id:183,name:"Indian Inst of Science",type:"institutional",category:"Academic",description:"Premier Indian research institution.",url:"https://iisc.ac.in",connections:[182,91]},
+{id:184,name:"Univ of Cape Town",type:"institutional",category:"Academic",description:"Leading African research university.",url:"https://uct.ac.za",connections:[185,107]},
+{id:185,name:"Univ of São Paulo",type:"institutional",category:"Academic",description:"Largest Latin American university.",url:"https://usp.br",connections:[181,184]},
+// NEWS - WIRE SERVICES
+{id:10,name:"Associated Press",type:"primary",category:"News",description:"American news agency. Global wire service.",url:"https://apnews.com",connections:[11,12]},
+{id:11,name:"Reuters",type:"primary",category:"News",description:"International news agency. Wire service.",url:"https://reuters.com",connections:[10,12]},
+// NEWS - WESTERN
+{id:12,name:"BBC News",type:"analysis",category:"News",description:"British public broadcaster. Global coverage.",url:"https://bbc.com/news",connections:[10,11,13]},
+{id:13,name:"The Guardian",type:"analysis",category:"News",description:"British newspaper. International coverage.",url:"https://theguardian.com",connections:[12,14]},
+{id:14,name:"New York Times",type:"analysis",category:"News",description:"American newspaper of record.",url:"https://nytimes.com",connections:[13,15]},
+{id:15,name:"Washington Post",type:"analysis",category:"News",description:"American daily. Politics and national coverage.",url:"https://washingtonpost.com",connections:[14,16]},
+{id:16,name:"Financial Times",type:"analysis",category:"News",description:"International business newspaper.",url:"https://ft.com",connections:[15,17]},
+{id:17,name:"The Economist",type:"analysis",category:"News",description:"British weekly. Politics, business, finance.",url:"https://economist.com",connections:[16,70]},
+{id:68,name:"The Atlantic",type:"analysis",category:"News",description:"American magazine. Cultural/political commentary.",url:"https://theatlantic.com",connections:[14,69]},
+{id:69,name:"New Yorker",type:"analysis",category:"News",description:"American magazine. Reporting and essays.",url:"https://newyorker.com",connections:[68,14]},
+{id:70,name:"Foreign Affairs",type:"analysis",category:"News",description:"International relations magazine.",url:"https://foreignaffairs.com",connections:[17,18]},
+{id:62,name:"ProPublica",type:"analysis",category:"News",description:"Nonprofit investigative journalism.",url:"https://propublica.org",connections:[14,15]},
+// NEWS - INDIAN
+{id:91,name:"Times of India",type:"analysis",category:"News",description:"India's largest English newspaper.",url:"https://timesofindia.com",connections:[92,93]},
+{id:92,name:"The Hindu",type:"analysis",category:"News",description:"Indian daily. Founded 1878.",url:"https://thehindu.com",connections:[91,93]},
+{id:93,name:"NDTV",type:"analysis",category:"News",description:"Indian TV news. English and Hindi.",url:"https://ndtv.com",connections:[91,92,94]},
+{id:94,name:"The Wire",type:"analysis",category:"News",description:"Indian independent digital news.",url:"https://thewire.in",connections:[93,95]},
+{id:95,name:"Scroll.in",type:"analysis",category:"News",description:"Indian digital publication.",url:"https://scroll.in",connections:[94,91]},
+// NEWS - AFRICAN
+{id:105,name:"Daily Maverick",type:"analysis",category:"News",description:"South African daily. Investigative journalism.",url:"https://dailymaverick.co.za",connections:[106,184]},
+{id:106,name:"The Nation (Kenya)",type:"analysis",category:"News",description:"Kenyan newspaper. East African coverage.",url:"https://nation.africa",connections:[105,107]},
+{id:107,name:"News24",type:"analysis",category:"News",description:"South African news platform.",url:"https://news24.com",connections:[105,106]},
+// NEWS - LATIN AMERICAN
+{id:108,name:"Folha de S.Paulo",type:"analysis",category:"News",description:"Brazilian newspaper. Largest circulation.",url:"https://folha.uol.com.br",connections:[109,185]},
+{id:109,name:"La Nación",type:"analysis",category:"News",description:"Argentine newspaper. Founded 1870.",url:"https://lanacion.com.ar",connections:[108,110]},
+{id:110,name:"El Universal",type:"analysis",category:"News",description:"Mexican newspaper. Est. 1916.",url:"https://eluniversal.com.mx",connections:[109,57]},
+{id:57,name:"El País",type:"analysis",category:"News",description:"Spanish newspaper. International coverage.",url:"https://elpais.com",connections:[56,110]},
+{id:56,name:"Le Monde",type:"analysis",category:"News",description:"French daily newspaper.",url:"https://lemonde.fr",connections:[13,19,57]},
+// NEWS - MIDDLE EASTERN
+{id:18,name:"Al Jazeera",type:"analysis",category:"News",description:"Qatari broadcaster. Middle Eastern perspective.",url:"https://aljazeera.com",connections:[12,111]},
+{id:111,name:"Haaretz",type:"analysis",category:"News",description:"Israeli newspaper. Liberal perspective.",url:"https://haaretz.com",connections:[18,112]},
+{id:112,name:"The Daily Star Lebanon",type:"analysis",category:"News",description:"Lebanese English-language newspaper.",url:"https://dailystar.com.lb",connections:[111,18]},
+// NEWS - SOUTHEAST ASIAN
+{id:113,name:"Straits Times",type:"analysis",category:"News",description:"Singaporean newspaper. Regional coverage.",url:"https://straitstimes.com",connections:[114,115]},
+{id:114,name:"Bangkok Post",type:"analysis",category:"News",description:"Thai English-language newspaper.",url:"https://bangkokpost.com",connections:[113,115]},
+{id:115,name:"Jakarta Post",type:"analysis",category:"News",description:"Indonesian English-language daily.",url:"https://jakartapost.com",connections:[113,114]},
+// NEWS - EUROPEAN
+{id:19,name:"Deutsche Welle",type:"analysis",category:"News",description:"German public broadcaster.",url:"https://dw.com",connections:[12,56]},
+// PLATFORMS - GLOBAL SOCIAL
+{id:26,name:"Reddit",type:"community",category:"Social",description:"Social news aggregation. Subreddit communities.",url:"https://reddit.com",connections:[24,27,28]},
+{id:27,name:"Discord",type:"community",category:"Social",description:"Voice, video, text communication.",url:"https://discord.com",connections:[26,28,67]},
+{id:28,name:"Twitter/X",type:"community",category:"Social",description:"Microblogging. Real-time discussion.",url:"https://twitter.com",connections:[26,27,29]},
+{id:29,name:"Facebook",type:"community",category:"Social",description:"Social networking. 3B+ users.",url:"https://facebook.com",connections:[28,30]},
+{id:30,name:"Instagram",type:"community",category:"Social",description:"Photo/video sharing. Meta.",url:"https://instagram.com",connections:[29,31]},
+{id:31,name:"TikTok",type:"community",category:"Social",description:"Short-form video. ByteDance.",url:"https://tiktok.com",connections:[30,32,36]},
+{id:32,name:"YouTube",type:"community",category:"Social",description:"Video sharing. Google.",url:"https://youtube.com",connections:[31,33,152]},
+{id:33,name:"Twitch",type:"community",category:"Social",description:"Live streaming. Gaming and creative.",url:"https://twitch.tv",connections:[32,34]},
+{id:67,name:"Telegram",type:"community",category:"Social",description:"Cloud messaging. 800M+ users.",url:"https://telegram.org",connections:[27,34,65]},
+// PLATFORMS - CHINESE
+{id:34,name:"WeChat",type:"community",category:"Social",description:"Chinese super-app. 1.3B+ users.",url:"https://weixin.qq.com",connections:[35,36,37,67]},
+{id:35,name:"Weibo",type:"community",category:"Social",description:"Chinese microblogging. 580M+ users.",url:"https://weibo.com",connections:[34,36]},
+{id:36,name:"Douyin",type:"community",category:"Social",description:"Chinese short video. 600M+ daily users.",url:"https://douyin.com",connections:[34,35,31]},
+{id:37,name:"Bilibili",type:"community",category:"Social",description:"Chinese video platform. ACG focus.",url:"https://bilibili.com",connections:[34,32]},
+// PLATFORMS - INDIAN
+{id:96,name:"ShareChat",type:"community",category:"Social",description:"Indian social media. Regional languages. 180M+ users.",url:"https://sharechat.com",connections:[97,34,93]},
+{id:97,name:"Moj",type:"community",category:"Social",description:"Indian short video. Regional languages.",url:"https://moj.app",connections:[96,31]},
+// PLATFORMS - REGIONAL
+{id:63,name:"Naver",type:"community",category:"Social",description:"South Korean portal. Dominant in Korea.",url:"https://naver.com",connections:[64,66]},
+{id:64,name:"Line",type:"community",category:"Social",description:"Japanese messaging. Japan, Taiwan, Thailand.",url:"https://line.me",connections:[63,34,114]},
+// TECH - DEVELOPMENT
+{id:23,name:"GitHub",type:"primary",category:"Technology",description:"Version control and collaboration.",url:"https://github.com",connections:[24,25]},
+{id:24,name:"Stack Overflow",type:"community",category:"Technology",description:"Q&A for programmers.",url:"https://stackoverflow.com",connections:[23,25,26]},
+{id:25,name:"Hacker News",type:"community",category:"Technology",description:"Tech news and discussion.",url:"https://news.ycombinator.com",connections:[23,24,3]},
+// TECH - NEWS
+{id:73,name:"ArsTechnica",type:"analysis",category:"Technology",description:"Technology news. In-depth coverage.",url:"https://arstechnica.com",connections:[25,74]},
+{id:74,name:"The Verge",type:"analysis",category:"Technology",description:"Technology news. Vox Media.",url:"https://theverge.com",connections:[73,25]},
+// GOVERNMENT - US
+{id:38,name:"US Census Bureau",type:"primary",category:"Government",description:"Federal statistical system. Population/economic data.",url:"https://census.gov",connections:[39,40,81]},
+{id:39,name:"Bureau of Labor Statistics",type:"primary",category:"Government",description:"Labor market and economic data.",url:"https://bls.gov",connections:[38,40,43]},
+{id:40,name:"Federal Reserve",type:"primary",category:"Government",description:"US central bank. Economic data and policy.",url:"https://federalreserve.gov",connections:[38,39,43]},
+{id:41,name:"Congress.gov",type:"primary",category:"Government",description:"US federal legislative information.",url:"https://congress.gov",connections:[42]},
+{id:42,name:"Federal Register",type:"primary",category:"Government",description:"Official US government journal.",url:"https://federalregister.gov",connections:[41]},
+{id:81,name:"Data.gov",type:"primary",category:"Government",description:"US government open data.",url:"https://data.gov",connections:[38,39,82]},
+// GOVERNMENT - INTERNATIONAL
+{id:82,name:"European Data Portal",type:"primary",category:"Government",description:"EU open data.",url:"https://data.europa.eu",connections:[81,46]},
+{id:59,name:"UN Official Documents",type:"primary",category:"Government",description:"United Nations documentation.",url:"https://documents.un.org",connections:[45,46,143]},
+// ECONOMICS & FINANCE
+{id:43,name:"FRED",type:"primary",category:"Economics",description:"Federal Reserve Economic Data. 500k+ time series.",url:"https://fred.stlouisfed.org",connections:[38,39,40,16]},
+{id:44,name:"World Bank Data",type:"primary",category:"Economics",description:"Global development data.",url:"https://data.worldbank.org",connections:[45,46,77]},
+{id:45,name:"IMF",type:"institutional",category:"Economics",description:"International Monetary Fund. Global economic data.",url:"https://imf.org",connections:[44,46,59]},
+{id:46,name:"OECD",type:"institutional",category:"Economics",description:"Economic cooperation and development data.",url:"https://oecd.org",connections:[44,45,82]},
+{id:47,name:"Bloomberg",type:"analysis",category:"Finance",description:"Financial data and news.",url:"https://bloomberg.com",connections:[16,43]},
+{id:77,name:"Our World in Data",type:"analysis",category:"Data",description:"Research on global problems. Oxford.",url:"https://ourworldindata.org",connections:[44,43,83]},
+{id:78,name:"Statista",type:"primary",category:"Data",description:"Statistics portal. Market data.",url:"https://statista.com",connections:[77,43]},
+// INTERNATIONAL ORGANIZATIONS
+{id:143,name:"WHO",type:"institutional",category:"Health",description:"World Health Organization. Global health.",url:"https://who.int",connections:[4,5,59,144]},
+{id:144,name:"FAO",type:"institutional",category:"Agriculture",description:"Food and Agriculture Organization. UN.",url:"https://fao.org",connections:[143,145,59]},
+{id:145,name:"UNESCO",type:"institutional",category:"Culture",description:"Education, Science, and Culture. UN.",url:"https://unesco.org",connections:[144,59,60]},
+{id:146,name:"Amnesty International",type:"institutional",category:"Human Rights",description:"Human rights NGO.",url:"https://amnesty.org",connections:[147,59]},
+{id:147,name:"Human Rights Watch",type:"institutional",category:"Human Rights",description:"International human rights NGO.",url:"https://hrw.org",connections:[146,59]},
+{id:148,name:"Red Cross",type:"institutional",category:"Humanitarian",description:"International humanitarian movement.",url:"https://icrc.org",connections:[143,59]},
+{id:149,name:"ILO",type:"institutional",category:"Labor",description:"International Labour Organization. UN.",url:"https://ilo.org",connections:[39,59]},
+// CULTURAL INSTITUTIONS
+{id:48,name:"Metropolitan Museum",type:"institutional",category:"Arts",description:"NYC art museum. Encyclopedic collection.",url:"https://metmuseum.org",connections:[49,50,60]},
+{id:49,name:"British Museum",type:"institutional",category:"Arts",description:"London museum. Human history and culture.",url:"https://britishmuseum.org",connections:[48,50]},
+{id:50,name:"Louvre",type:"institutional",category:"Arts",description:"Paris art museum. Most-visited museum.",url:"https://louvre.fr",connections:[48,49]},
+{id:60,name:"Smithsonian",type:"institutional",category:"Arts",description:"Museums and education centers. DC.",url:"https://si.edu",connections:[22,48,145]},
+// REFERENCE
+{id:20,name:"Wikipedia",type:"institutional",category:"Reference",description:"Free encyclopedia. 300+ languages.",url:"https://wikipedia.org",connections:[21,22]},
+{id:21,name:"Internet Archive",type:"institutional",category:"Reference",description:"Digital library. Wayback Machine.",url:"https://archive.org",connections:[20,22,90]},
+{id:22,name:"Library of Congress",type:"institutional",category:"Reference",description:"US national library. World's largest.",url:"https://loc.gov",connections:[20,21,60]},
+// EDUCATION
+{id:53,name:"MIT OpenCourseWare",type:"institutional",category:"Education",description:"Free MIT course materials.",url:"https://ocw.mit.edu",connections:[54,55]},
+{id:54,name:"Khan Academy",type:"institutional",category:"Education",description:"Free online education.",url:"https://khanacademy.org",connections:[53,55]},
+{id:55,name:"Coursera",type:"institutional",category:"Education",description:"Online learning. University partnerships.",url:"https://coursera.org",connections:[53,54]},
+// SCIENCE COMMUNICATION
+{id:51,name:"Quanta Magazine",type:"analysis",category:"Science",description:"Science journalism. Math, physics, biology.",url:"https://quantamagazine.org",connections:[1,2,52]},
+{id:52,name:"Scientific American",type:"analysis",category:"Science",description:"Popular science. Founded 1845.",url:"https://scientificamerican.com",connections:[51,61]},
+{id:61,name:"National Geographic",type:"analysis",category:"Science",description:"Geography, science, history, culture.",url:"https://nationalgeographic.com",connections:[52,60,84]},
+{id:83,name:"IPCC",type:"primary",category:"Science",description:"Intergovernmental Panel on Climate Change.",url:"https://ipcc.ch",connections:[59,1,84]},
+{id:84,name:"NASA",type:"primary",category:"Science",description:"National Aeronautics and Space Administration.",url:"https://nasa.gov",connections:[83,1,2,61]},
+// POLICY & THINK TANKS
+{id:79,name:"Brookings Institution",type:"analysis",category:"Policy",description:"American public policy research.",url:"https://brookings.edu",connections:[80,70]},
+{id:80,name:"RAND Corporation",type:"analysis",category:"Policy",description:"Global policy think tank.",url:"https://rand.org",connections:[79,70]},
+// BUSINESS
+{id:75,name:"Harvard Business Review",type:"analysis",category:"Business",description:"Management magazine.",url:"https://hbr.org",connections:[17,16,76]},
+{id:76,name:"McKinsey Quarterly",type:"analysis",category:"Business",description:"Management consulting insights.",url:"https://mckinsey.com/quarterly",connections:[75,17]},
+// MAPS & GEOGRAPHY
+{id:85,name:"OpenStreetMap",type:"primary",category:"Maps",description:"Collaborative mapping. Open data.",url:"https://openstreetmap.org",connections:[86]},
+{id:86,name:"Google Maps",type:"institutional",category:"Maps",description:"Web mapping platform.",url:"https://maps.google.com",connections:[85]},
+// SPORTS
+{id:120,name:"FIFA",type:"institutional",category:"Sports",description:"International football association.",url:"https://fifa.com",connections:[121,122]},
+{id:121,name:"Olympics",type:"institutional",category:"Sports",description:"International Olympic Committee.",url:"https://olympics.com",connections:[120,122]},
+{id:122,name:"ESPN",type:"analysis",category:"Sports",description:"American sports network.",url:"https://espn.com",connections:[120,121,123]},
+{id:123,name:"BBC Sport",type:"analysis",category:"Sports",description:"British sports coverage.",url:"https://bbc.com/sport",connections:[122,12]},
+{id:124,name:"UEFA",type:"institutional",category:"Sports",description:"European football association.",url:"https://uefa.com",connections:[120]},
+{id:125,name:"NBA",type:"institutional",category:"Sports",description:"National Basketball Association.",url:"https://nba.com",connections:[122]},
+{id:126,name:"The Athletic",type:"analysis",category:"Sports",description:"Subscription sports journalism.",url:"https://theathletic.com",connections:[122,123]},
+// MUSIC & AUDIO
+{id:150,name:"Spotify",type:"institutional",category:"Music",description:"Music streaming. 500M+ users.",url:"https://spotify.com",connections:[151,152]},
+{id:151,name:"SoundCloud",type:"community",category:"Music",description:"Music and audio platform.",url:"https://soundcloud.com",connections:[150,152]},
+{id:152,name:"Bandcamp",type:"community",category:"Music",description:"Music publishing and discovery.",url:"https://bandcamp.com",connections:[150,151,32]},
+{id:153,name:"Anghami",type:"institutional",category:"Music",description:"Arabic music streaming.",url:"https://anghami.com",connections:[150,154]},
+{id:154,name:"Gaana",type:"institutional",category:"Music",description:"Indian music streaming.",url:"https://gaana.com",connections:[153,150,93]},
+// BOOKS & LITERATURE
+{id:87,name:"IMDb",type:"institutional",category:"Entertainment",description:"Film, TV, video game database.",url:"https://imdb.com",connections:[88]},
+{id:88,name:"Letterboxd",type:"community",category:"Entertainment",description:"Social network for film.",url:"https://letterboxd.com",connections:[87,26]},
+{id:89,name:"Goodreads",type:"community",category:"Books",description:"Social cataloging for books. 90M+ members.",url:"https://goodreads.com",connections:[26,90]},
+{id:90,name:"Project Gutenberg",type:"institutional",category:"Books",description:"Free public domain eBooks.",url:"https://gutenberg.org",connections:[89,21]},
+// RELIGIOUS & SPIRITUAL
+{id:160,name:"Vatican",type:"institutional",category:"Religious",description:"Holy See. Catholic Church headquarters.",url:"https://vatican.va",connections:[161,59]},
+{id:161,name:"Al-Azhar",type:"institutional",category:"Religious",description:"Sunni Islamic university. Cairo.",url:"http://azhar.eg",connections:[160,18]},
+{id:162,name:"World Council of Churches",type:"institutional",category:"Religious",description:"Christian ecumenical organization.",url:"https://oikoumene.org",connections:[160]},
+// MEDICAL & HEALTH
+{id:71,name:"PubMed Central",type:"primary",category:"Academic",description:"Free biomedical literature archive.",url:"https://ncbi.nlm.nih.gov/pmc",connections:[4,5]},
+{id:72,name:"Cochrane Library",type:"primary",category:"Academic",description:"Systematic reviews and meta-analyses.",url:"https://cochranelibrary.com",connections:[4,71,143]},
+];
+
+function toggleLegend() {
+  const content = document.getElementById('legend-content');
+  content.classList.toggle('active');
+}
+
+function toggleReflexivity() {
+  const content = document.getElementById('reflexivity-content');
+  content.classList.toggle('active');
+}
+
+function toggleFilter() {
+  const content = document.getElementById('filter-content');
+  content.classList.toggle('active');
+}
+
+// Build category filter checkboxes
+const categories = [...new Set(nodes.map(n => n.category))].sort();
+const filterContainer = document.getElementById('category-checkboxes');
+const visibleCategories = new Set(categories);
+
+categories.forEach(category => {
+  const label = document.createElement('label');
+  label.className = 'category-checkbox';
+  label.innerHTML = `
+    <input type="checkbox" checked onchange="toggleCategory('${category}')">
+    <span>${category}</span>
+  `;
+  filterContainer.appendChild(label);
+});
+
+function toggleCategory(category) {
+  if (visibleCategories.has(category)) {
+    visibleCategories.delete(category);
+  } else {
+    visibleCategories.add(category);
+  }
+  
+  // Update node visibility
+  nodeMeshes.forEach(mesh => {
+    const node = mesh.userData;
+    if (visibleCategories.has(node.category)) {
+      mesh.visible = true;
+    } else {
+      mesh.visible = false;
+    }
+  });
+  
+  // Update select-all checkbox
+  document.getElementById('select-all').checked = visibleCategories.size === categories.length;
+}
+
+function toggleAllCategories() {
+  const selectAll = document.getElementById('select-all').checked;
+  
+  if (selectAll) {
+    categories.forEach(cat => visibleCategories.add(cat));
+  } else {
+    visibleCategories.clear();
+  }
+  
+  // Update all checkboxes
+  filterContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.checked = selectAll;
+  });
+  
+  // Update node visibility
+  nodeMeshes.forEach(mesh => {
+    mesh.visible = selectAll;
+  });
+}
+
+function closeDetail() {
+  document.getElementById('node-detail').style.display = 'none';
+}
+
+// Search functionality
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase().trim();
+  
+  if (term.length < 2) {
+    searchResults.style.display = 'none';
+    return;
+  }
+  
+  const matches = nodes.filter(node => 
+    node.name.toLowerCase().includes(term) || 
+    node.description.toLowerCase().includes(term) ||
+    node.category.toLowerCase().includes(term)
+  ).slice(0, 10);
+  
+  if (matches.length > 0) {
+    searchResults.innerHTML = matches.map(node => `
+      <div class="search-result" onclick="selectNode(${node.id})">
+        <div class="search-result-name">${node.name}</div>
+        <div class="search-result-desc">${node.description}</div>
+      </div>
+    `).join('');
+    searchResults.style.display = 'block';
+  } else {
+    searchResults.style.display = 'none';
+  }
+});
+
+// Click outside to close search
+document.addEventListener('click', (e) => {
+  if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+    searchResults.style.display = 'none';
+  }
+});
+
+function selectNode(nodeId) {
+  const node = nodes.find(n => n.id === nodeId);
+  if (node) {
+    showNodeDetail(node);
+    searchResults.style.display = 'none';
+    searchInput.value = '';
+  }
+}
+
+const typeColors = {
+  primary: 0x2a9d8f,
+  analysis: 0x457b9d,
+  community: 0xe76f51,
+  institutional: 0xf4a261
+};
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x0a0a0a);
+document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.minDistance = 20;
+controls.maxDistance = 400;
+
+// Define category clusters with positions in 3D space
+const categoryZones = {
+  'Academic': { x: 0, y: 40, z: 0 },
+  'News': { x: -50, y: 20, z: 0 },
+  'Social': { x: 50, y: 20, z: 20 },
+  'Technology': { x: 40, y: -20, z: -30 },
+  'Government': { x: -40, y: -30, z: 20 },
+  'Economics': { x: -30, y: -20, z: -30 },
+  'Finance': { x: -35, y: -25, z: -25 },
+  'Data': { x: -25, y: -15, z: -35 },
+  'Health': { x: 15, y: 35, z: 15 },
+  'Agriculture': { x: 20, y: 30, z: 25 },
+  'Culture': { x: 0, y: -40, z: 20 },
+  'Human Rights': { x: -50, y: 0, z: 30 },
+  'Humanitarian': { x: -45, y: 5, z: 35 },
+  'Labor': { x: -35, y: -10, z: 25 },
+  'Arts': { x: 5, y: -35, z: 15 },
+  'Education': { x: 10, y: 40, z: -10 },
+  'Science': { x: 5, y: 45, z: 5 },
+  'Policy': { x: -45, y: -15, z: 15 },
+  'Business': { x: -40, y: -35, z: -10 },
+  'Maps': { x: 30, y: -30, z: -20 },
+  'Sports': { x: 60, y: -10, z: 0 },
+  'Music': { x: 40, y: 0, z: 40 },
+  'Entertainment': { x: 35, y: -25, z: 30 },
+  'Books': { x: 25, y: -35, z: 25 },
+  'Religious': { x: -20, y: 0, z: -50 },
+  'Reference': { x: 0, y: 0, z: -40 }
+};
+
+const categoryDescriptions = {
+  'Academic': 'Peer-reviewed journals, research repositories, and scholarly databases. Primary sources for scientific research across disciplines.',
+  'News': 'News agencies, newspapers, and journalism outlets from around the world. Includes wire services, investigative journalism, and international coverage.',
+  'Social': 'Social media platforms and messaging apps. Global and regional networks including Western, Chinese, Indian, and Korean platforms.',
+  'Technology': 'Developer platforms, tech news, and programming communities. Tools and resources for software development and technology discussion.',
+  'Government': 'Official government data portals, legislative information, and statistical agencies. Primary sources for policy and civic data.',
+  'Economics': 'Economic data, global development statistics, and international financial institutions. Authoritative sources for economic indicators.',
+  'Finance': 'Financial news and data services. Professional-grade financial information and market analysis.',
+  'Data': 'Open data repositories and statistical aggregators. Visualization and analysis of global trends.',
+  'Health': 'World Health Organization and global health authorities. Official sources for public health information.',
+  'Agriculture': 'FAO and agricultural development organizations. Food security and farming data.',
+  'Culture': 'Cultural institutions and heritage organizations. International cultural exchange and preservation.',
+  'Human Rights': 'International human rights organizations and advocacy groups. Monitoring and reporting on rights globally.',
+  'Humanitarian': 'Humanitarian aid organizations and relief agencies. International humanitarian response.',
+  'Labor': 'International labor organizations and worker rights groups. Global labor standards and employment data.',
+  'Arts': 'Major museums and art institutions. Collections spanning history and cultures worldwide.',
+  'Education': 'Free online learning platforms and open courseware. Educational resources from universities and nonprofits.',
+  'Science': 'Science communication outlets and research agencies. Making science accessible to broad audiences.',
+  'Policy': 'Think tanks and policy research organizations. Analysis of public policy and governance.',
+  'Business': 'Business analysis and management research. Professional insights and corporate strategy.',
+  'Maps': 'Mapping platforms and geographic information systems. Open and commercial mapping data.',
+  'Sports': 'Major sports organizations, leagues, and coverage. International and regional athletic competition.',
+  'Music': 'Music streaming and discovery platforms. Global and regional music services.',
+  'Entertainment': 'Film, TV, and entertainment databases. Social platforms for media enthusiasts.',
+  'Books': 'Book cataloging and literary communities. Reading lists and digital libraries.',
+  'Religious': 'Major religious institutions and interfaith organizations. Official sources for religious scholarship.',
+  'Reference': 'Encyclopedias, archives, and libraries. Comprehensive reference collections and preservation.'
+};
+
+// Track category label sprites for click detection
+const categoryLabelSprites = [];
+
+// Add category labels in 3D space
+Object.entries(categoryZones).forEach(([category, pos]) => {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 512;
+  canvas.height = 128;
+  
+  // Semi-transparent background
+  context.fillStyle = 'rgba(20, 20, 20, 0.6)';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+  context.lineWidth = 2;
+  context.strokeRect(0, 0, canvas.width, canvas.height);
+  
+  // Category name in smaller, lighter text
+  context.fillStyle = 'rgba(255, 255, 255, 0.5)';
+  context.font = 'bold 32px -apple-system, Arial, sans-serif';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(category.toUpperCase(), 256, 64);
+  
+  const texture = new THREE.CanvasTexture(canvas);
+  const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+  const sprite = new THREE.Sprite(spriteMaterial);
+  sprite.position.set(pos.x, pos.y + 15, pos.z);
+  sprite.scale.set(10, 2.5, 1);
+  sprite.userData = { category, isLabel: true };
+  scene.add(sprite);
+  categoryLabelSprites.push(sprite);
+});
+
+const nodeMeshes = [];
+const nodePositions = {};
+
+// Position nodes in clusters based on category
+nodes.forEach((node, i) => {
+  // Get base position for this category
+  const zone = categoryZones[node.category] || { x: 0, y: 0, z: 0 };
+  
+  // Add randomization within the cluster (smaller radius for tighter grouping)
+  const clusterRadius = 12;
+  const offsetX = (Math.random() - 0.5) * clusterRadius;
+  const offsetY = (Math.random() - 0.5) * clusterRadius;
+  const offsetZ = (Math.random() - 0.5) * clusterRadius;
+  
+  const x = zone.x + offsetX;
+  const y = zone.y + offsetY;
+  const z = zone.z + offsetZ;
+  
+  nodePositions[node.id] = { x, y, z };
+  
+  const geometry = new THREE.SphereGeometry(0.5, 16, 16);
+  const material = new THREE.MeshBasicMaterial({ 
+    color: typeColors[node.type],
+    transparent: true,
+    opacity: 0.9
+  });
+  const sphere = new THREE.Mesh(geometry, material);
+  sphere.position.set(x, y, z);
+  sphere.userData = node;
+  scene.add(sphere);
+  nodeMeshes.push(sphere);
+  
+  // Add label for every node
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 512;
+  canvas.height = 96;
+  
+  // Dark background for readability
+  context.fillStyle = 'rgba(10, 10, 10, 0.8)';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // White text
+  context.fillStyle = 'rgba(255, 255, 255, 0.95)';
+  context.font = 'bold 32px -apple-system, Arial, sans-serif';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  
+  // Truncate if needed
+  const displayName = node.name.length > 22 ? node.name.substring(0, 20) + '...' : node.name;
+  context.fillText(displayName, 256, 48);
+  
+  const texture = new THREE.CanvasTexture(canvas);
+  const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+  const sprite = new THREE.Sprite(spriteMaterial);
+  sprite.position.set(x, y + 2, z);
+  sprite.scale.set(6, 1.2, 1);
+  sprite.userData = { nodeId: node.id, isNodeLabel: true };
+  scene.add(sprite);
+});
+
+// Create connections
+const lineMaterial = new THREE.LineBasicMaterial({ 
+  color: 0x222222,
+  transparent: true,
+  opacity: 0.08
+});
+
+nodes.forEach(node => {
+  const startPos = nodePositions[node.id];
+  if (node.connections) {
+    node.connections.forEach(targetId => {
+      const endPos = nodePositions[targetId];
+      if (endPos) {
+        const geometry = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(startPos.x, startPos.y, startPos.z),
+          new THREE.Vector3(endPos.x, endPos.y, endPos.z)
+        ]);
+        const line = new THREE.Line(geometry, lineMaterial);
+        scene.add(line);
+      }
+    });
+  }
+});
+
+camera.position.z = 100;
+camera.position.y = 20;
+
+const raycaster = new THREE.Raycaster();
+raycaster.params.Sprite = { threshold: 5 }; // Increase threshold for easier clicking
+const mouse = new THREE.Vector2();
+let hoveredNode = null;
+const tooltip = document.getElementById('node-tooltip');
+
+function onMouseMove(event) {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  
+  raycaster.setFromCamera(mouse, camera);
+  
+  // Check if hovering over category label
+  const labelIntersects = raycaster.intersectObjects(categoryLabelSprites);
+  if (labelIntersects.length > 0 && labelIntersects[0].object.userData.isLabel) {
+    document.body.style.cursor = 'pointer';
+    tooltip.textContent = 'Click to explore ' + labelIntersects[0].object.userData.category;
+    tooltip.style.display = 'block';
+    tooltip.style.left = event.clientX + 15 + 'px';
+    tooltip.style.top = event.clientY + 15 + 'px';
+    
+    if (hoveredNode) {
+      hoveredNode.material.opacity = 0.9;
+      hoveredNode.scale.set(1, 1, 1);
+      hoveredNode = null;
+    }
+    return;
+  }
+  
+  // Check nodes
+  const intersects = raycaster.intersectObjects(nodeMeshes);
+  
+  if (hoveredNode) {
+    hoveredNode.material.opacity = 0.9;
+    hoveredNode.scale.set(1, 1, 1);
+    hoveredNode = null;
+  }
+  
+  if (intersects.length > 0) {
+    hoveredNode = intersects[0].object;
+    hoveredNode.material.opacity = 1;
+    hoveredNode.scale.set(1.5, 1.5, 1.5);
+    document.body.style.cursor = 'pointer';
+    
+    // Show tooltip
+    const node = hoveredNode.userData;
+    tooltip.textContent = node.name;
+    tooltip.style.display = 'block';
+    tooltip.style.left = event.clientX + 15 + 'px';
+    tooltip.style.top = event.clientY + 15 + 'px';
+  } else {
+    document.body.style.cursor = 'default';
+    tooltip.style.display = 'none';
+  }
+}
+
+function onClick(event) {
+  raycaster.setFromCamera(mouse, camera);
+  
+  // Check category labels first
+  const labelIntersects = raycaster.intersectObjects(categoryLabelSprites);
+  if (labelIntersects.length > 0) {
+    const category = labelIntersects[0].object.userData.category;
+    showCategorySummary(category);
+    return;
+  }
+  
+  // Then check nodes
+  const intersects = raycaster.intersectObjects(nodeMeshes);
+  if (intersects.length > 0) {
+    const node = intersects[0].object.userData;
+    showNodeDetail(node);
+  }
+}
+
+let highlightedCategory = null;
+
+function showCategorySummary(category) {
+  const categoryNodes = nodes.filter(n => n.category === category);
+  const typeGroups = {};
+  
+  categoryNodes.forEach(node => {
+    if (!typeGroups[node.type]) typeGroups[node.type] = [];
+    typeGroups[node.type].push(node);
+  });
+  
+  const typeLabels = {
+    primary: 'Primary Sources',
+    analysis: 'Analysis & Synthesis',
+    community: 'Community Discussion',
+    institutional: 'Institutional'
+  };
+  
+  let sourcesHTML = '';
+  Object.entries(typeGroups).forEach(([type, nodes]) => {
+    sourcesHTML += `<h3 style="margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1rem; opacity: 0.8;">${typeLabels[type]}</h3>`;
+    nodes.forEach(node => {
+      const color = {primary: '#2a9d8f', analysis: '#457b9d', community: '#e76f51', institutional: '#f4a261'}[type];
+      sourcesHTML += `
+        <div class="source-item" style="border-left-color: ${color};" onclick="selectNodeFromSummary(${node.id})">
+          <div class="source-name">${node.name}</div>
+          <div class="source-desc">${node.description}</div>
+        </div>
+      `;
+    });
+  });
+  
+  document.getElementById('category-summary-content').innerHTML = `
+    <h2>${category}</h2>
+    <div class="summary-stats">${categoryNodes.length} sources</div>
+    <div class="summary-description">${categoryDescriptions[category] || ''}</div>
+    <div class="sources-list">${sourcesHTML}</div>
+  `;
+  
+  document.getElementById('category-summary').style.display = 'block';
+  
+  // Highlight nodes in this category
+  highlightedCategory = category;
+  nodeMeshes.forEach(mesh => {
+    if (mesh.userData.category === category) {
+      mesh.material.opacity = 1;
+      mesh.scale.set(1.3, 1.3, 1.3);
+    } else {
+      mesh.material.opacity = 0.2;
+      mesh.scale.set(1, 1, 1);
+    }
+  });
+}
+
+function closeCategorySummary() {
+  document.getElementById('category-summary').style.display = 'none';
+  highlightedCategory = null;
+  
+  // Reset all nodes
+  nodeMeshes.forEach(mesh => {
+    mesh.material.opacity = 0.9;
+    mesh.scale.set(1, 1, 1);
+  });
+}
+
+function selectNodeFromSummary(nodeId) {
+  const node = nodes.find(n => n.id === nodeId);
+  if (node) {
+    closeCategorySummary();
+    showNodeDetail(node);
+  }
+}
+
+// Add touch support
+let touchStarted = false;
+renderer.domElement.addEventListener('touchend', (event) => {
+  if (!touchStarted) return;
+  touchStarted = false;
+  
+  const touch = event.changedTouches[0];
+  mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+  
+  raycaster.setFromCamera(mouse, camera);
+  
+  // Check category labels first
+  const labelIntersects = raycaster.intersectObjects(categoryLabelSprites);
+  if (labelIntersects.length > 0 && labelIntersects[0].object.userData.isLabel) {
+    const category = labelIntersects[0].object.userData.category;
+    showCategorySummary(category);
+    return;
+  }
+  
+  // Then nodes
+  const intersects = raycaster.intersectObjects(nodeMeshes);
+  if (intersects.length > 0) {
+    const node = intersects[0].object.userData;
+    showNodeDetail(node);
+  }
+});
+
+renderer.domElement.addEventListener('touchstart', () => {
+  touchStarted = true;
+});
+
+renderer.domElement.addEventListener('touchmove', () => {
+  touchStarted = false;
+});
+
+function showNodeDetail(node) {
+  const detailPanel = document.getElementById('node-detail');
+  const typeLabels = {
+    primary: 'Primary Source',
+    analysis: 'Analysis & Synthesis',
+    community: 'Community Discussion',
+    institutional: 'Institutional'
+  };
+  
+  detailPanel.innerHTML = `
+    <button class="close-btn" onclick="closeDetail()">✕</button>
+    <h2>${node.name}</h2>
+    <div class="node-type">${typeLabels[node.type]} • ${node.category}</div>
+    <p>${node.description}</p>
+    <a href="${node.url}" target="_blank" rel="noopener noreferrer">Visit ${node.name} →</a>
+  `;
+  detailPanel.style.display = 'block';
+}
+
+window.addEventListener('mousemove', onMouseMove);
+window.addEventListener('click', onClick);
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+  </script>
+</body>
+</html>

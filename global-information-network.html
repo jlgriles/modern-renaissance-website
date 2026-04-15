@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Global Information Network Map</title>
+  <title>Global Information Network - Comprehensive Atlas</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <style>
@@ -375,7 +375,7 @@
   
   <div id="info-panel">
     <h1>Global Information Network</h1>
-    <p>160 sources worldwide. Search or tap nodes for details.</p>
+    <p>387 sources worldwide. Search or tap nodes for details.</p>
     
     <div class="legend">
       <div class="legend-toggle" onclick="toggleLegend()">📊 Legend (tap to show/hide)</div>
@@ -441,171 +441,810 @@
 
   <script>
 const nodes = [
-// ACADEMIC - WESTERN
-{id:1,name:"Nature",type:"primary",category:"Academic",description:"Leading science journal. Peer-reviewed research.",url:"https://nature.com",connections:[2,3,180]},
-{id:2,name:"Science",type:"primary",category:"Academic",description:"AAAS journal. Multidisciplinary science.",url:"https://science.org",connections:[1,3,180]},
-{id:3,name:"arXiv",type:"primary",category:"Academic",description:"Preprint repository. Physics, math, CS.",url:"https://arxiv.org",connections:[1,2]},
-{id:4,name:"PubMed",type:"primary",category:"Academic",description:"NIH biomedical literature database.",url:"https://pubmed.gov",connections:[5,6]},
+
+// ============================================================================
+// ACADEMIC (45 sources)
+// ============================================================================
+
+// Primary journals & databases (existing)
+{id:1,name:"Nature",type:"primary",category:"Academic",description:"Leading international scientific journal publishing peer-reviewed research.",url:"https://nature.com",connections:[2,3,200]},
+{id:2,name:"Science",type:"primary",category:"Academic",description:"AAAS multidisciplinary scientific journal.",url:"https://science.org",connections:[1,3,200]},
+{id:3,name:"arXiv",type:"primary",category:"Academic",description:"Open-access preprint repository for physics, mathematics, CS.",url:"https://arxiv.org",connections:[1,2,201]},
+{id:4,name:"PubMed",type:"primary",category:"Academic",description:"NIH database of biomedical literature.",url:"https://pubmed.gov",connections:[5,6,202]},
 {id:5,name:"NEJM",type:"primary",category:"Academic",description:"New England Journal of Medicine.",url:"https://nejm.org",connections:[4,6]},
-{id:6,name:"The Lancet",type:"primary",category:"Academic",description:"British medical journal. Est. 1823.",url:"https://thelancet.com",connections:[4,5]},
-{id:7,name:"JSTOR",type:"primary",category:"Academic",description:"Digital library. Journals and books.",url:"https://jstor.org",connections:[8,181]},
-{id:8,name:"Google Scholar",type:"primary",category:"Academic",description:"Scholarly literature search.",url:"https://scholar.google.com",connections:[7,9]},
-{id:9,name:"SSRN",type:"primary",category:"Academic",description:"Social science working papers.",url:"https://ssrn.com",connections:[7,8]},
-// ACADEMIC - NON-WEIRD
-{id:180,name:"Chinese Academy of Sciences",type:"primary",category:"Academic",description:"China's national academy. Major research.",url:"http://english.cas.cn",connections:[1,2,182]},
-{id:181,name:"SciELO",type:"primary",category:"Academic",description:"Latin American academic journals.",url:"https://scielo.org",connections:[7,185]},
-{id:182,name:"Tsinghua University",type:"institutional",category:"Academic",description:"Leading Chinese research university.",url:"https://tsinghua.edu.cn",connections:[180,183]},
-{id:183,name:"Indian Inst of Science",type:"institutional",category:"Academic",description:"Premier Indian research institution.",url:"https://iisc.ac.in",connections:[182,91]},
-{id:184,name:"Univ of Cape Town",type:"institutional",category:"Academic",description:"Leading African research university.",url:"https://uct.ac.za",connections:[185,107]},
-{id:185,name:"Univ of São Paulo",type:"institutional",category:"Academic",description:"Largest Latin American university.",url:"https://usp.br",connections:[181,184]},
-// NEWS - WIRE SERVICES
-{id:10,name:"Associated Press",type:"primary",category:"News",description:"American news agency. Global wire service.",url:"https://apnews.com",connections:[11,12]},
-{id:11,name:"Reuters",type:"primary",category:"News",description:"International news agency. Wire service.",url:"https://reuters.com",connections:[10,12]},
-// NEWS - WESTERN
-{id:12,name:"BBC News",type:"analysis",category:"News",description:"British public broadcaster. Global coverage.",url:"https://bbc.com/news",connections:[10,11,13]},
-{id:13,name:"The Guardian",type:"analysis",category:"News",description:"British newspaper. International coverage.",url:"https://theguardian.com",connections:[12,14]},
+{id:6,name:"The Lancet",type:"primary",category:"Academic",description:"British medical journal founded 1823.",url:"https://thelancet.com",connections:[4,5]},
+{id:7,name:"JSTOR",type:"primary",category:"Academic",description:"Digital library of academic journals and books.",url:"https://jstor.org",connections:[8,210]},
+{id:8,name:"Google Scholar",type:"primary",category:"Academic",description:"Scholarly literature search engine.",url:"https://scholar.google.com",connections:[7,9,206]},
+{id:9,name:"SSRN",type:"primary",category:"Academic",description:"Social Science Research Network repository.",url:"https://ssrn.com",connections:[7,8,203]},
+{id:71,name:"PubMed Central",type:"primary",category:"Academic",description:"Free full-text archive of biomedical literature.",url:"https://ncbi.nlm.nih.gov/pmc",connections:[4,5]},
+{id:72,name:"Cochrane Library",type:"primary",category:"Academic",description:"Systematic reviews and meta-analyses database.",url:"https://cochranelibrary.com",connections:[4,71]},
+
+// Discipline-specific preprints
+{id:200,name:"bioRxiv",type:"primary",category:"Academic",description:"Preprint server for biology research.",url:"https://biorxiv.org",connections:[1,2,4]},
+{id:201,name:"medRxiv",type:"primary",category:"Academic",description:"Preprint server for medical research.",url:"https://medrxiv.org",connections:[4,5,200]},
+{id:202,name:"SocArXiv",type:"primary",category:"Academic",description:"Open archive for social science research.",url:"https://socopen.org",connections:[9,203]},
+{id:203,name:"PhilPapers",type:"primary",category:"Academic",description:"Comprehensive index of philosophy research.",url:"https://philpapers.org",connections:[9,202]},
+
+// Citation & metrics
+{id:204,name:"Web of Science",type:"primary",category:"Academic",description:"Citation database for scientific research.",url:"https://webofscience.com",connections:[8,205,206]},
+{id:205,name:"Scopus",type:"primary",category:"Academic",description:"Citation database and abstract indexing service.",url:"https://scopus.com",connections:[8,204,206]},
+{id:206,name:"Semantic Scholar",type:"primary",category:"Academic",description:"AI-powered research tool for scientific literature.",url:"https://semanticscholar.org",connections:[8,204,205]},
+{id:207,name:"OpenCitations",type:"primary",category:"Academic",description:"Open database of scholarly citation data.",url:"https://opencitations.net",connections:[206,211]},
+
+// Open access movement
+{id:208,name:"PLOS",type:"institutional",category:"Academic",description:"Public Library of Science. Open access publisher.",url:"https://plos.org",connections:[1,209,211]},
+{id:209,name:"DOAJ",type:"institutional",category:"Academic",description:"Directory of Open Access Journals.",url:"https://doaj.org",connections:[208,211]},
+{id:210,name:"SciELO",type:"primary",category:"Academic",description:"Scientific Electronic Library Online for Latin America.",url:"https://scielo.org",connections:[7,211]},
+{id:211,name:"cOAlition S",type:"institutional",category:"Academic",description:"International consortium promoting open access publishing.",url:"https://coalition-s.org",connections:[208,209,210]},
+
+// Research integrity & meta-research
+{id:212,name:"Retraction Watch",type:"analysis",category:"Academic",description:"Blog tracking retractions in scientific literature.",url:"https://retractionwatch.com",connections:[213,214]},
+{id:213,name:"PubPeer",type:"community",category:"Academic",description:"Platform for post-publication peer review.",url:"https://pubpeer.com",connections:[212,214]},
+{id:214,name:"Scholarly Kitchen",type:"analysis",category:"Academic",description:"Blog on scholarly communication and publishing.",url:"https://scholarlykitchen.sspnet.org",connections:[212,213]},
+
+// Regional research institutions
+{id:180,name:"Chinese Academy of Sciences",type:"institutional",category:"Academic",description:"China's national academy for natural sciences.",url:"http://english.cas.cn",connections:[1,2,182]},
+{id:181,name:"Tsinghua University",type:"institutional",category:"Academic",description:"Leading Chinese research university.",url:"https://tsinghua.edu.cn",connections:[180,183]},
+{id:182,name:"Indian Institute of Science",type:"institutional",category:"Academic",description:"Premier Indian research institution.",url:"https://iisc.ac.in",connections:[181,215]},
+{id:183,name:"University of Cape Town",type:"institutional",category:"Academic",description:"Leading African research university.",url:"https://uct.ac.za",connections:[184,216]},
+{id:184,name:"University of São Paulo",type:"institutional",category:"Academic",description:"Largest Latin American research university.",url:"https://usp.br",connections:[183,210]},
+{id:215,name:"IIT System",type:"institutional",category:"Academic",description:"Indian Institutes of Technology network.",url:"https://jeeadv.ac.in",connections:[182]},
+{id:216,name:"African Academy of Sciences",type:"institutional",category:"Academic",description:"Pan-African science organization.",url:"https://aasciences.africa",connections:[183]},
+
+// Academic standards & professional bodies
+{id:217,name:"AAR",type:"institutional",category:"Academic",description:"American Academy of Religion for religious studies.",url:"https://aarweb.org",connections:[203]},
+{id:218,name:"APA",type:"institutional",category:"Academic",description:"American Psychological Association.",url:"https://apa.org",connections:[4]},
+
+// ============================================================================
+// NEWS (60 sources)
+// ============================================================================
+
+// Wire services (existing)
+{id:10,name:"Associated Press",type:"primary",category:"News",description:"American news agency providing global wire service.",url:"https://apnews.com",connections:[11,12]},
+{id:11,name:"Reuters",type:"primary",category:"News",description:"International news agency and wire service.",url:"https://reuters.com",connections:[10,12]},
+
+// International news - Western (existing)
+{id:12,name:"BBC News",type:"analysis",category:"News",description:"British public broadcaster with global coverage.",url:"https://bbc.com/news",connections:[10,11,13]},
+{id:13,name:"The Guardian",type:"analysis",category:"News",description:"British newspaper with international reporting.",url:"https://theguardian.com",connections:[12,14]},
 {id:14,name:"New York Times",type:"analysis",category:"News",description:"American newspaper of record.",url:"https://nytimes.com",connections:[13,15]},
-{id:15,name:"Washington Post",type:"analysis",category:"News",description:"American daily. Politics and national coverage.",url:"https://washingtonpost.com",connections:[14,16]},
+{id:15,name:"Washington Post",type:"analysis",category:"News",description:"American daily newspaper focused on politics.",url:"https://washingtonpost.com",connections:[14,16]},
 {id:16,name:"Financial Times",type:"analysis",category:"News",description:"International business newspaper.",url:"https://ft.com",connections:[15,17]},
-{id:17,name:"The Economist",type:"analysis",category:"News",description:"British weekly. Politics, business, finance.",url:"https://economist.com",connections:[16,70]},
-{id:68,name:"The Atlantic",type:"analysis",category:"News",description:"American magazine. Cultural/political commentary.",url:"https://theatlantic.com",connections:[14,69]},
-{id:69,name:"New Yorker",type:"analysis",category:"News",description:"American magazine. Reporting and essays.",url:"https://newyorker.com",connections:[68,14]},
-{id:70,name:"Foreign Affairs",type:"analysis",category:"News",description:"International relations magazine.",url:"https://foreignaffairs.com",connections:[17,18]},
-{id:62,name:"ProPublica",type:"analysis",category:"News",description:"Nonprofit investigative journalism.",url:"https://propublica.org",connections:[14,15]},
-// NEWS - INDIAN
-{id:91,name:"Times of India",type:"analysis",category:"News",description:"India's largest English newspaper.",url:"https://timesofindia.com",connections:[92,93]},
-{id:92,name:"The Hindu",type:"analysis",category:"News",description:"Indian daily. Founded 1878.",url:"https://thehindu.com",connections:[91,93]},
-{id:93,name:"NDTV",type:"analysis",category:"News",description:"Indian TV news. English and Hindi.",url:"https://ndtv.com",connections:[91,92,94]},
-{id:94,name:"The Wire",type:"analysis",category:"News",description:"Indian independent digital news.",url:"https://thewire.in",connections:[93,95]},
+{id:17,name:"The Economist",type:"analysis",category:"News",description:"British weekly covering politics, business, science.",url:"https://economist.com",connections:[16,70]},
+{id:68,name:"The Atlantic",type:"analysis",category:"News",description:"American magazine with cultural and political commentary.",url:"https://theatlantic.com",connections:[14,69]},
+{id:69,name:"New Yorker",type:"analysis",category:"News",description:"American magazine known for reporting and essays.",url:"https://newyorker.com",connections:[68,14]},
+{id:70,name:"Foreign Affairs",type:"analysis",category:"News",description:"Leading magazine on international relations.",url:"https://foreignaffairs.com",connections:[17,18]},
+{id:62,name:"ProPublica",type:"analysis",category:"News",description:"Nonprofit investigative journalism organization.",url:"https://propublica.org",connections:[14,15,230]},
+
+// International news - Indian
+{id:91,name:"Times of India",type:"analysis",category:"News",description:"India's largest English-language newspaper.",url:"https://timesofindia.com",connections:[92,93]},
+{id:92,name:"The Hindu",type:"analysis",category:"News",description:"Indian English-language daily founded 1878.",url:"https://thehindu.com",connections:[91,93]},
+{id:93,name:"NDTV",type:"analysis",category:"News",description:"Indian television news network.",url:"https://ndtv.com",connections:[91,92,94]},
+{id:94,name:"The Wire",type:"analysis",category:"News",description:"Indian independent digital news platform.",url:"https://thewire.in",connections:[93,95]},
 {id:95,name:"Scroll.in",type:"analysis",category:"News",description:"Indian digital publication.",url:"https://scroll.in",connections:[94,91]},
-// NEWS - AFRICAN
-{id:105,name:"Daily Maverick",type:"analysis",category:"News",description:"South African daily. Investigative journalism.",url:"https://dailymaverick.co.za",connections:[106,184]},
-{id:106,name:"The Nation (Kenya)",type:"analysis",category:"News",description:"Kenyan newspaper. East African coverage.",url:"https://nation.africa",connections:[105,107]},
+
+// International news - African
+{id:105,name:"Daily Maverick",type:"analysis",category:"News",description:"South African investigative journalism.",url:"https://dailymaverick.co.za",connections:[106,183]},
+{id:106,name:"The Nation (Kenya)",type:"analysis",category:"News",description:"Kenyan newspaper with East African coverage.",url:"https://nation.africa",connections:[105,107]},
 {id:107,name:"News24",type:"analysis",category:"News",description:"South African news platform.",url:"https://news24.com",connections:[105,106]},
-// NEWS - LATIN AMERICAN
-{id:108,name:"Folha de S.Paulo",type:"analysis",category:"News",description:"Brazilian newspaper. Largest circulation.",url:"https://folha.uol.com.br",connections:[109,185]},
-{id:109,name:"La Nación",type:"analysis",category:"News",description:"Argentine newspaper. Founded 1870.",url:"https://lanacion.com.ar",connections:[108,110]},
-{id:110,name:"El Universal",type:"analysis",category:"News",description:"Mexican newspaper. Est. 1916.",url:"https://eluniversal.com.mx",connections:[109,57]},
-{id:57,name:"El País",type:"analysis",category:"News",description:"Spanish newspaper. International coverage.",url:"https://elpais.com",connections:[56,110]},
+
+// International news - Latin American
+{id:108,name:"Folha de S.Paulo",type:"analysis",category:"News",description:"Brazilian newspaper with largest circulation.",url:"https://folha.uol.com.br",connections:[109,184]},
+{id:109,name:"La Nación",type:"analysis",category:"News",description:"Argentine newspaper founded 1870.",url:"https://lanacion.com.ar",connections:[108,110]},
+{id:110,name:"El Universal",type:"analysis",category:"News",description:"Mexican newspaper established 1916.",url:"https://eluniversal.com.mx",connections:[109,57]},
+
+// International news - European
+{id:57,name:"El País",type:"analysis",category:"News",description:"Spanish newspaper with international coverage.",url:"https://elpais.com",connections:[56,110]},
 {id:56,name:"Le Monde",type:"analysis",category:"News",description:"French daily newspaper.",url:"https://lemonde.fr",connections:[13,19,57]},
-// NEWS - MIDDLE EASTERN
-{id:18,name:"Al Jazeera",type:"analysis",category:"News",description:"Qatari broadcaster. Middle Eastern perspective.",url:"https://aljazeera.com",connections:[12,111]},
-{id:111,name:"Haaretz",type:"analysis",category:"News",description:"Israeli newspaper. Liberal perspective.",url:"https://haaretz.com",connections:[18,112]},
+{id:19,name:"Deutsche Welle",type:"analysis",category:"News",description:"German public international broadcaster.",url:"https://dw.com",connections:[12,56]},
+
+// International news - Middle Eastern
+{id:18,name:"Al Jazeera",type:"analysis",category:"News",description:"Qatari broadcaster with Middle Eastern perspective.",url:"https://aljazeera.com",connections:[12,111]},
+{id:111,name:"Haaretz",type:"analysis",category:"News",description:"Israeli newspaper with liberal stance.",url:"https://haaretz.com",connections:[18,112]},
 {id:112,name:"The Daily Star Lebanon",type:"analysis",category:"News",description:"Lebanese English-language newspaper.",url:"https://dailystar.com.lb",connections:[111,18]},
-// NEWS - SOUTHEAST ASIAN
-{id:113,name:"Straits Times",type:"analysis",category:"News",description:"Singaporean newspaper. Regional coverage.",url:"https://straitstimes.com",connections:[114,115]},
+
+// International news - Southeast Asian
+{id:113,name:"Straits Times",type:"analysis",category:"News",description:"Singaporean newspaper with regional coverage.",url:"https://straitstimes.com",connections:[114,115]},
 {id:114,name:"Bangkok Post",type:"analysis",category:"News",description:"Thai English-language newspaper.",url:"https://bangkokpost.com",connections:[113,115]},
 {id:115,name:"Jakarta Post",type:"analysis",category:"News",description:"Indonesian English-language daily.",url:"https://jakartapost.com",connections:[113,114]},
-// NEWS - EUROPEAN
-{id:19,name:"Deutsche Welle",type:"analysis",category:"News",description:"German public broadcaster.",url:"https://dw.com",connections:[12,56]},
-// PLATFORMS - GLOBAL SOCIAL
-{id:26,name:"Reddit",type:"community",category:"Social",description:"Social news aggregation. Subreddit communities.",url:"https://reddit.com",connections:[24,27,28]},
-{id:27,name:"Discord",type:"community",category:"Social",description:"Voice, video, text communication.",url:"https://discord.com",connections:[26,28,67]},
-{id:28,name:"Twitter/X",type:"community",category:"Social",description:"Microblogging. Real-time discussion.",url:"https://twitter.com",connections:[26,27,29]},
-{id:29,name:"Facebook",type:"community",category:"Social",description:"Social networking. 3B+ users.",url:"https://facebook.com",connections:[28,30]},
-{id:30,name:"Instagram",type:"community",category:"Social",description:"Photo/video sharing. Meta.",url:"https://instagram.com",connections:[29,31]},
-{id:31,name:"TikTok",type:"community",category:"Social",description:"Short-form video. ByteDance.",url:"https://tiktok.com",connections:[30,32,36]},
-{id:32,name:"YouTube",type:"community",category:"Social",description:"Video sharing. Google.",url:"https://youtube.com",connections:[31,33,152]},
-{id:33,name:"Twitch",type:"community",category:"Social",description:"Live streaming. Gaming and creative.",url:"https://twitch.tv",connections:[32,34]},
-{id:67,name:"Telegram",type:"community",category:"Social",description:"Cloud messaging. 800M+ users.",url:"https://telegram.org",connections:[27,34,65]},
-// PLATFORMS - CHINESE
-{id:34,name:"WeChat",type:"community",category:"Social",description:"Chinese super-app. 1.3B+ users.",url:"https://weixin.qq.com",connections:[35,36,37,67]},
-{id:35,name:"Weibo",type:"community",category:"Social",description:"Chinese microblogging. 580M+ users.",url:"https://weibo.com",connections:[34,36]},
-{id:36,name:"Douyin",type:"community",category:"Social",description:"Chinese short video. 600M+ daily users.",url:"https://douyin.com",connections:[34,35,31]},
-{id:37,name:"Bilibili",type:"community",category:"Social",description:"Chinese video platform. ACG focus.",url:"https://bilibili.com",connections:[34,32]},
-// PLATFORMS - INDIAN
-{id:96,name:"ShareChat",type:"community",category:"Social",description:"Indian social media. Regional languages. 180M+ users.",url:"https://sharechat.com",connections:[97,34,93]},
-{id:97,name:"Moj",type:"community",category:"Social",description:"Indian short video. Regional languages.",url:"https://moj.app",connections:[96,31]},
-// PLATFORMS - REGIONAL
-{id:63,name:"Naver",type:"community",category:"Social",description:"South Korean portal. Dominant in Korea.",url:"https://naver.com",connections:[64,66]},
-{id:64,name:"Line",type:"community",category:"Social",description:"Japanese messaging. Japan, Taiwan, Thailand.",url:"https://line.me",connections:[63,34,114]},
-// TECH - DEVELOPMENT
-{id:23,name:"GitHub",type:"primary",category:"Technology",description:"Version control and collaboration.",url:"https://github.com",connections:[24,25]},
-{id:24,name:"Stack Overflow",type:"community",category:"Technology",description:"Q&A for programmers.",url:"https://stackoverflow.com",connections:[23,25,26]},
-{id:25,name:"Hacker News",type:"community",category:"Technology",description:"Tech news and discussion.",url:"https://news.ycombinator.com",connections:[23,24,3]},
-// TECH - NEWS
-{id:73,name:"ArsTechnica",type:"analysis",category:"Technology",description:"Technology news. In-depth coverage.",url:"https://arstechnica.com",connections:[25,74]},
+
+// Media criticism & journalism research
+{id:220,name:"Columbia Journalism Review",type:"analysis",category:"News",description:"Magazine analyzing press performance and trends.",url:"https://cjr.org",connections:[221,222,14]},
+{id:221,name:"Nieman Lab",type:"analysis",category:"News",description:"Harvard journalism innovation research.",url:"https://niemanlab.org",connections:[220,222]},
+{id:222,name:"Poynter Institute",type:"institutional",category:"News",description:"Journalism training and ethics organization.",url:"https://poynter.org",connections:[220,221,223]},
+{id:223,name:"Reuters Institute",type:"institutional",category:"News",description:"Oxford journalism research center.",url:"https://reutersinstitute.politics.ox.ac.uk",connections:[222,11]},
+{id:224,name:"Pew Research Journalism",type:"analysis",category:"News",description:"Research on journalism and media trends.",url:"https://journalism.org",connections:[223]},
+
+// Fact-checking networks
+{id:225,name:"Snopes",type:"analysis",category:"News",description:"Fact-checking website for claims and rumors.",url:"https://snopes.com",connections:[226,227]},
+{id:226,name:"PolitiFact",type:"analysis",category:"News",description:"Political fact-checking service.",url:"https://politifact.com",connections:[225,227]},
+{id:227,name:"Full Fact",type:"analysis",category:"News",description:"UK independent fact-checking organization.",url:"https://fullfact.org",connections:[225,226,228]},
+{id:228,name:"Africa Check",type:"analysis",category:"News",description:"African fact-checking organization.",url:"https://africacheck.org",connections:[227,229]},
+{id:229,name:"Chequeado",type:"analysis",category:"News",description:"Latin American fact-checking network.",url:"https://chequeado.com",connections:[228]},
+
+// Press freedom & journalist protection
+{id:230,name:"Reporters Without Borders",type:"institutional",category:"News",description:"International press freedom organization.",url:"https://rsf.org",connections:[231,232]},
+{id:231,name:"Committee to Protect Journalists",type:"institutional",category:"News",description:"Independent nonprofit promoting press freedom.",url:"https://cpj.org",connections:[230,232]},
+{id:232,name:"Index on Censorship",type:"institutional",category:"News",description:"Free expression advocacy organization.",url:"https://indexoncensorship.org",connections:[230,231,233]},
+{id:233,name:"Article 19",type:"institutional",category:"News",description:"Human rights organization defending free expression.",url:"https://article19.org",connections:[232]},
+
+// Investigative networks
+{id:234,name:"Bellingcat",type:"analysis",category:"News",description:"Independent investigative journalism collective.",url:"https://bellingcat.com",connections:[235,62]},
+{id:235,name:"OCCRP",type:"analysis",category:"News",description:"Organized Crime and Corruption Reporting Project.",url:"https://occrp.org",connections:[234,236]},
+{id:236,name:"ICIJ",type:"analysis",category:"News",description:"International Consortium of Investigative Journalists.",url:"https://icij.org",connections:[235,62]},
+{id:237,name:"Forbidden Stories",type:"institutional",category:"News",description:"Network continuing work of threatened journalists.",url:"https://forbiddenstories.org",connections:[236,230]},
+
+// Journalism standards & professional bodies
+{id:238,name:"Society of Professional Journalists",type:"institutional",category:"News",description:"US journalism ethics and standards organization.",url:"https://spj.org",connections:[222]},
+{id:239,name:"Ethical Journalism Network",type:"institutional",category:"News",description:"Global coalition promoting journalism ethics.",url:"https://ethicaljournalismnetwork.org",connections:[238,222]},
+
+// News councils & media accountability
+{id:240,name:"News Media Alliance",type:"institutional",category:"News",description:"News industry trade organization.",url:"https://newsmediaalliance.org",connections:[222]},
+
+// ============================================================================
+// SOCIAL MEDIA & PLATFORMS (35 sources)
+// ============================================================================
+
+// Global platforms (existing)
+{id:26,name:"Reddit",type:"community",category:"Social",description:"Social news aggregation with topic communities.",url:"https://reddit.com",connections:[24,27,28]},
+{id:27,name:"Discord",type:"community",category:"Social",description:"Voice, video, and text communication platform.",url:"https://discord.com",connections:[26,28,67]},
+{id:28,name:"Twitter/X",type:"community",category:"Social",description:"Microblogging platform for real-time discussion.",url:"https://twitter.com",connections:[26,27,29]},
+{id:29,name:"Facebook",type:"community",category:"Social",description:"Social networking with 3B+ users.",url:"https://facebook.com",connections:[28,30]},
+{id:30,name:"Instagram",type:"community",category:"Social",description:"Photo and video sharing platform.",url:"https://instagram.com",connections:[29,31]},
+{id:31,name:"TikTok",type:"community",category:"Social",description:"Short-form video hosting service.",url:"https://tiktok.com",connections:[30,32,36]},
+{id:32,name:"YouTube",type:"community",category:"Social",description:"Video sharing platform owned by Google.",url:"https://youtube.com",connections:[31,33]},
+{id:33,name:"Twitch",type:"community",category:"Social",description:"Live streaming for gaming and creative content.",url:"https://twitch.tv",connections:[32,34]},
+
+// Messaging platforms
+{id:67,name:"Telegram",type:"community",category:"Social",description:"Cloud messaging with 800M+ users.",url:"https://telegram.org",connections:[27,34,65]},
+{id:250,name:"WhatsApp",type:"community",category:"Social",description:"Messaging app with 2B+ users globally.",url:"https://whatsapp.com",connections:[29,67]},
+{id:251,name:"Signal",type:"community",category:"Social",description:"Privacy-focused encrypted messaging.",url:"https://signal.org",connections:[67,250]},
+
+// Chinese platforms (existing)
+{id:34,name:"WeChat",type:"community",category:"Social",description:"Chinese super-app with 1.3B+ users.",url:"https://weixin.qq.com",connections:[35,36,37,67]},
+{id:35,name:"Weibo",type:"community",category:"Social",description:"Chinese microblogging with 580M+ users.",url:"https://weibo.com",connections:[34,36]},
+{id:36,name:"Douyin",type:"community",category:"Social",description:"Chinese short video with 600M+ daily users.",url:"https://douyin.com",connections:[34,35,31]},
+{id:37,name:"Bilibili",type:"community",category:"Social",description:"Chinese video platform popular with youth.",url:"https://bilibili.com",connections:[34,32]},
+
+// Indian platforms (existing)
+{id:96,name:"ShareChat",type:"community",category:"Social",description:"Indian social media in regional languages. 180M+ users.",url:"https://sharechat.com",connections:[97,34,93]},
+{id:97,name:"Moj",type:"community",category:"Social",description:"Indian short video in regional languages.",url:"https://moj.app",connections:[96,31]},
+
+// Regional platforms - East Asian
+{id:63,name:"Naver",type:"community",category:"Social",description:"South Korean web portal dominant in Korea.",url:"https://naver.com",connections:[64,66]},
+{id:64,name:"Line",type:"community",category:"Social",description:"Japanese messaging popular in Japan, Taiwan, Thailand.",url:"https://line.me",connections:[63,34,114]},
+{id:252,name:"KakaoTalk",type:"community",category:"Social",description:"South Korean messaging with 90% Korean penetration.",url:"https://kakaocorp.com",connections:[63,64]},
+
+// Regional platforms - Russian
+{id:65,name:"VKontakte",type:"community",category:"Social",description:"Russian social network with 100M+ users.",url:"https://vk.com",connections:[29,66,67]},
+{id:66,name:"Yandex",type:"primary",category:"Technology",description:"Russian search engine dominant in Russia.",url:"https://yandex.com",connections:[65,8,63]},
+
+// Decentralized & federated
+{id:253,name:"Mastodon",type:"community",category:"Social",description:"Decentralized microblogging in the fediverse.",url:"https://joinmastodon.org",connections:[28,254]},
+{id:254,name:"Bluesky",type:"community",category:"Social",description:"Decentralized social network using AT Protocol.",url:"https://bsky.app",connections:[28,253]},
+
+// Professional networking
+{id:255,name:"LinkedIn",type:"community",category:"Social",description:"Professional networking with 900M+ members.",url:"https://linkedin.com",connections:[29]},
+
+// Content platforms
+{id:256,name:"Medium",type:"community",category:"Social",description:"Online publishing platform for long-form content.",url:"https://medium.com",connections:[26]},
+{id:257,name:"Substack",type:"community",category:"Social",description:"Newsletter platform for independent writers.",url:"https://substack.com",connections:[256]},
+
+// Forum platforms
+{id:258,name:"Stack Exchange Network",type:"community",category:"Social",description:"Q&A network across multiple topics.",url:"https://stackexchange.com",connections:[24,26]},
+
+// Content creator platforms
+{id:259,name:"Patreon",type:"community",category:"Social",description:"Membership platform for creators. 8M+ patrons.",url:"https://patreon.com",connections:[32,33]},
+
+// African platforms
+{id:260,name:"Afrimazing",type:"community",category:"Social",description:"African social networking platform.",url:"https://afrimazing.com",connections:[105]},
+
+// ============================================================================
+// TECHNOLOGY & DEVELOPMENT (25 sources)
+// ============================================================================
+
+// Version control & collaboration (existing)
+{id:23,name:"GitHub",type:"primary",category:"Technology",description:"Platform for version control and collaborative development.",url:"https://github.com",connections:[24,25,270]},
+{id:24,name:"Stack Overflow",type:"community",category:"Technology",description:"Q&A site for programmers.",url:"https://stackoverflow.com",connections:[23,25,26,258]},
+{id:25,name:"Hacker News",type:"community",category:"Technology",description:"Social news focused on computer science and entrepreneurship.",url:"https://news.ycombinator.com",connections:[23,24,3]},
+
+// Tech news (existing)
+{id:73,name:"ArsTechnica",type:"analysis",category:"Technology",description:"Technology news with in-depth coverage.",url:"https://arstechnica.com",connections:[25,74]},
 {id:74,name:"The Verge",type:"analysis",category:"Technology",description:"Technology news. Vox Media.",url:"https://theverge.com",connections:[73,25]},
-// GOVERNMENT - US
-{id:38,name:"US Census Bureau",type:"primary",category:"Government",description:"Federal statistical system. Population/economic data.",url:"https://census.gov",connections:[39,40,81]},
-{id:39,name:"Bureau of Labor Statistics",type:"primary",category:"Government",description:"Labor market and economic data.",url:"https://bls.gov",connections:[38,40,43]},
-{id:40,name:"Federal Reserve",type:"primary",category:"Government",description:"US central bank. Economic data and policy.",url:"https://federalreserve.gov",connections:[38,39,43]},
-{id:41,name:"Congress.gov",type:"primary",category:"Government",description:"US federal legislative information.",url:"https://congress.gov",connections:[42]},
-{id:42,name:"Federal Register",type:"primary",category:"Government",description:"Official US government journal.",url:"https://federalregister.gov",connections:[41]},
-{id:81,name:"Data.gov",type:"primary",category:"Government",description:"US government open data.",url:"https://data.gov",connections:[38,39,82]},
-// GOVERNMENT - INTERNATIONAL
-{id:82,name:"European Data Portal",type:"primary",category:"Government",description:"EU open data.",url:"https://data.europa.eu",connections:[81,46]},
-{id:59,name:"UN Official Documents",type:"primary",category:"Government",description:"United Nations documentation.",url:"https://documents.un.org",connections:[45,46,143]},
-// ECONOMICS & FINANCE
-{id:43,name:"FRED",type:"primary",category:"Economics",description:"Federal Reserve Economic Data. 500k+ time series.",url:"https://fred.stlouisfed.org",connections:[38,39,40,16]},
-{id:44,name:"World Bank Data",type:"primary",category:"Economics",description:"Global development data.",url:"https://data.worldbank.org",connections:[45,46,77]},
+
+// Additional version control
+{id:270,name:"GitLab",type:"primary",category:"Technology",description:"DevOps platform with Git repository management.",url:"https://gitlab.com",connections:[23,271]},
+{id:271,name:"Bitbucket",type:"primary",category:"Technology",description:"Git repository hosting service. Atlassian.",url:"https://bitbucket.org",connections:[23,270]},
+
+// Package managers & repositories
+{id:272,name:"npm",type:"primary",category:"Technology",description:"Package manager for JavaScript. Node.js ecosystem.",url:"https://npmjs.com",connections:[23,273]},
+{id:273,name:"PyPI",type:"primary",category:"Technology",description:"Python Package Index for Python libraries.",url:"https://pypi.org",connections:[272,274]},
+{id:274,name:"crates.io",type:"primary",category:"Technology",description:"Rust package registry.",url:"https://crates.io",connections:[273]},
+
+// Documentation & learning
+{id:275,name:"MDN Web Docs",type:"institutional",category:"Technology",description:"Mozilla documentation for web technologies.",url:"https://developer.mozilla.org",connections:[276]},
+{id:276,name:"DevDocs",type:"institutional",category:"Technology",description:"API documentation browser for developers.",url:"https://devdocs.io",connections:[275]},
+
+// Developer communities
+{id:277,name:"Dev.to",type:"community",category:"Technology",description:"Community platform for software developers.",url:"https://dev.to",connections:[24,25,278]},
+{id:278,name:"Hashnode",type:"community",category:"Technology",description:"Blogging platform for developers.",url:"https://hashnode.com",connections:[277]},
+
+// Security
+{id:279,name:"CVE Program",type:"institutional",category:"Technology",description:"Common Vulnerabilities and Exposures database.",url:"https://cve.org",connections:[280,281]},
+{id:280,name:"NVD",type:"institutional",category:"Technology",description:"National Vulnerability Database. NIST.",url:"https://nvd.nist.gov",connections:[279,281]},
+{id:281,name:"OWASP",type:"institutional",category:"Technology",description:"Open Web Application Security Project.",url:"https://owasp.org",connections:[279,280]},
+
+// Standards bodies
+{id:282,name:"W3C",type:"institutional",category:"Technology",description:"World Wide Web Consortium. Web standards.",url:"https://w3.org",connections:[275]},
+{id:283,name:"IETF",type:"institutional",category:"Technology",description:"Internet Engineering Task Force. Internet standards.",url:"https://ietf.org",connections:[282]},
+
+// Tech research & reports
+{id:284,name:"Gartner",type:"analysis",category:"Technology",description:"Technology research and consulting firm.",url:"https://gartner.com",connections:[285]},
+{id:285,name:"Forrester",type:"analysis",category:"Technology",description:"Technology and market research company.",url:"https://forrester.com",connections:[284]},
+
+// Open source foundations
+{id:286,name:"Linux Foundation",type:"institutional",category:"Technology",description:"Nonprofit supporting Linux and open source.",url:"https://linuxfoundation.org",connections:[23]},
+{id:287,name:"Apache Software Foundation",type:"institutional",category:"Technology",description:"Nonprofit supporting Apache open source projects.",url:"https://apache.org",connections:[286]},
+
+// ============================================================================
+// GOVERNMENT & TRANSPARENCY (25 sources)
+// ============================================================================
+
+// Primary government data (existing)
+{id:38,name:"US Census Bureau",type:"primary",category:"Government",description:"Federal statistical system for population and economic data.",url:"https://census.gov",connections:[39,40,81]},
+{id:39,name:"Bureau of Labor Statistics",type:"primary",category:"Government",description:"US labor market and economic data.",url:"https://bls.gov",connections:[38,40,43]},
+{id:40,name:"Federal Reserve",type:"primary",category:"Government",description:"US central bank. Economic data and monetary policy.",url:"https://federalreserve.gov",connections:[38,39,43]},
+{id:41,name:"Congress.gov",type:"primary",category:"Government",description:"Official US federal legislative information.",url:"https://congress.gov",connections:[42]},
+{id:42,name:"Federal Register",type:"primary",category:"Government",description:"Official journal of US federal government.",url:"https://federalregister.gov",connections:[41]},
+{id:81,name:"Data.gov",type:"primary",category:"Government",description:"US government open data portal.",url:"https://data.gov",connections:[38,39,82]},
+{id:82,name:"European Data Portal",type:"primary",category:"Government",description:"EU open data portal.",url:"https://data.europa.eu",connections:[81,46]},
+{id:59,name:"UN Official Documents",type:"primary",category:"Government",description:"United Nations documentation system.",url:"https://documents.un.org",connections:[45,46,143]},
+
+// Transparency & accountability
+{id:290,name:"Open Government Partnership",type:"institutional",category:"Government",description:"International initiative promoting government transparency.",url:"https://opengovpartnership.org",connections:[81,82,291]},
+{id:291,name:"Sunlight Foundation",type:"institutional",category:"Government",description:"Nonprofit promoting government transparency and accountability.",url:"https://sunlightfoundation.com",connections:[290,292]},
+{id:292,name:"mySociety",type:"institutional",category:"Government",description:"Civic tech organization. Parliamentary monitoring tools.",url:"https://mysociety.org",connections:[291,293]},
+{id:293,name:"OpeningParliament.org",type:"institutional",category:"Government",description:"Network for legislative transparency worldwide.",url:"https://openingparliament.org",connections:[292]},
+
+// Procurement & spending
+{id:294,name:"Open Contracting Partnership",type:"institutional",category:"Government",description:"Organization promoting transparency in public contracting.",url:"https://open-contracting.org",connections:[290,295]},
+{id:295,name:"International Budget Partnership",type:"institutional",category:"Government",description:"Organization working on budget transparency.",url:"https://internationalbudget.org",connections:[294]},
+
+// Lobbying & influence tracking
+{id:296,name:"OpenSecrets",type:"analysis",category:"Government",description:"Money in US politics tracking. Center for Responsive Politics.",url:"https://opensecrets.org",connections:[41,297]},
+{id:297,name:"LobbyFacts",type:"analysis",category:"Government",description:"EU lobbying transparency database.",url:"https://lobbyfacts.eu",connections:[296]},
+
+// Regional government data
+{id:298,name:"Eurostat",type:"primary",category:"Government",description:"Statistical office of the European Union.",url:"https://ec.europa.eu/eurostat",connections:[82,46]},
+{id:299,name:"Statistics Canada",type:"primary",category:"Government",description:"Canadian national statistical agency.",url:"https://statcan.gc.ca",connections:[38]},
+{id:300,name:"Australian Bureau of Statistics",type:"primary",category:"Government",description:"Australian national statistical agency.",url:"https://abs.gov.au",connections:[38]},
+{id:301,name:"Statistics South Africa",type:"primary",category:"Government",description:"South African national statistical service.",url:"https://statssa.gov.za",connections:[183]},
+{id:302,name:"IBGE",type:"primary",category:"Government",description:"Brazilian Institute of Geography and Statistics.",url:"https://ibge.gov.br",connections:[184]},
+
+// Electoral & democracy monitoring
+{id:303,name:"International IDEA",type:"institutional",category:"Government",description:"Institute for Democracy and Electoral Assistance.",url:"https://idea.int",connections:[59,290]},
+{id:304,name:"ACE Electoral Knowledge Network",type:"institutional",category:"Government",description:"Electoral administration knowledge sharing.",url:"https://aceproject.org",connections:[303]},
+
+// Judicial & legal information
+{id:305,name:"Court Listener",type:"primary",category:"Government",description:"Free legal opinion database. US courts.",url:"https://courtlistener.com",connections:[41]},
+
+// ============================================================================
+// ECONOMICS & FINANCE (25 sources)
+// ============================================================================
+
+// Economic data (existing)
+{id:43,name:"FRED",type:"primary",category:"Economics",description:"Federal Reserve Economic Data. 500,000+ time series.",url:"https://fred.stlouisfed.org",connections:[38,39,40,16]},
+{id:44,name:"World Bank Data",type:"primary",category:"Economics",description:"Global development and economic data.",url:"https://data.worldbank.org",connections:[45,46,77]},
 {id:45,name:"IMF",type:"institutional",category:"Economics",description:"International Monetary Fund. Global economic data.",url:"https://imf.org",connections:[44,46,59]},
-{id:46,name:"OECD",type:"institutional",category:"Economics",description:"Economic cooperation and development data.",url:"https://oecd.org",connections:[44,45,82]},
-{id:47,name:"Bloomberg",type:"analysis",category:"Finance",description:"Financial data and news.",url:"https://bloomberg.com",connections:[16,43]},
-{id:77,name:"Our World in Data",type:"analysis",category:"Data",description:"Research on global problems. Oxford.",url:"https://ourworldindata.org",connections:[44,43,83]},
-{id:78,name:"Statista",type:"primary",category:"Data",description:"Statistics portal. Market data.",url:"https://statista.com",connections:[77,43]},
-// INTERNATIONAL ORGANIZATIONS
-{id:143,name:"WHO",type:"institutional",category:"Health",description:"World Health Organization. Global health.",url:"https://who.int",connections:[4,5,59,144]},
-{id:144,name:"FAO",type:"institutional",category:"Agriculture",description:"Food and Agriculture Organization. UN.",url:"https://fao.org",connections:[143,145,59]},
-{id:145,name:"UNESCO",type:"institutional",category:"Culture",description:"Education, Science, and Culture. UN.",url:"https://unesco.org",connections:[144,59,60]},
-{id:146,name:"Amnesty International",type:"institutional",category:"Human Rights",description:"Human rights NGO.",url:"https://amnesty.org",connections:[147,59]},
-{id:147,name:"Human Rights Watch",type:"institutional",category:"Human Rights",description:"International human rights NGO.",url:"https://hrw.org",connections:[146,59]},
-{id:148,name:"Red Cross",type:"institutional",category:"Humanitarian",description:"International humanitarian movement.",url:"https://icrc.org",connections:[143,59]},
-{id:149,name:"ILO",type:"institutional",category:"Labor",description:"International Labour Organization. UN.",url:"https://ilo.org",connections:[39,59]},
-// CULTURAL INSTITUTIONS
-{id:48,name:"Metropolitan Museum",type:"institutional",category:"Arts",description:"NYC art museum. Encyclopedic collection.",url:"https://metmuseum.org",connections:[49,50,60]},
-{id:49,name:"British Museum",type:"institutional",category:"Arts",description:"London museum. Human history and culture.",url:"https://britishmuseum.org",connections:[48,50]},
-{id:50,name:"Louvre",type:"institutional",category:"Arts",description:"Paris art museum. Most-visited museum.",url:"https://louvre.fr",connections:[48,49]},
-{id:60,name:"Smithsonian",type:"institutional",category:"Arts",description:"Museums and education centers. DC.",url:"https://si.edu",connections:[22,48,145]},
-// REFERENCE
-{id:20,name:"Wikipedia",type:"institutional",category:"Reference",description:"Free encyclopedia. 300+ languages.",url:"https://wikipedia.org",connections:[21,22]},
-{id:21,name:"Internet Archive",type:"institutional",category:"Reference",description:"Digital library. Wayback Machine.",url:"https://archive.org",connections:[20,22,90]},
-{id:22,name:"Library of Congress",type:"institutional",category:"Reference",description:"US national library. World's largest.",url:"https://loc.gov",connections:[20,21,60]},
-// EDUCATION
+{id:46,name:"OECD",type:"institutional",category:"Economics",description:"Organisation for Economic Co-operation and Development.",url:"https://oecd.org",connections:[44,45,82]},
+
+// Additional economic statistics
+{id:310,name:"BEA",type:"primary",category:"Economics",description:"Bureau of Economic Analysis. US economic accounts.",url:"https://bea.gov",connections:[38,39,43]},
+{id:311,name:"Eurostat Economics",type:"primary",category:"Economics",description:"European economic statistics.",url:"https://ec.europa.eu/eurostat",connections:[298,46]},
+
+// Financial regulation & stability
+{id:312,name:"BIS",type:"institutional",category:"Economics",description:"Bank for International Settlements. Central bank coordination.",url:"https://bis.org",connections:[40,45,313]},
+{id:313,name:"Financial Stability Board",type:"institutional",category:"Economics",description:"International body monitoring global financial system.",url:"https://fsb.org",connections:[312,45]},
+{id:314,name:"IOSCO",type:"institutional",category:"Economics",description:"International Organization of Securities Commissions.",url:"https://iosco.org",connections:[313]},
+
+// Development finance
+{id:315,name:"Asian Development Bank",type:"institutional",category:"Economics",description:"Regional development bank for Asia-Pacific.",url:"https://adb.org",connections:[44,316]},
+{id:316,name:"African Development Bank",type:"institutional",category:"Economics",description:"Regional development bank for Africa.",url:"https://afdb.org",connections:[44,315,317]},
+{id:317,name:"Inter-American Development Bank",type:"institutional",category:"Economics",description:"Development bank for Latin America and Caribbean.",url:"https://iadb.org",connections:[44,316]},
+
+// Economic research institutions
+{id:318,name:"NBER",type:"institutional",category:"Economics",description:"National Bureau of Economic Research. US economic research.",url:"https://nber.org",connections:[9,319]},
+{id:319,name:"CEPR",type:"institutional",category:"Economics",description:"Centre for Economic Policy Research. European economics.",url:"https://cepr.org",connections:[318,320]},
+{id:320,name:"IZA",type:"institutional",category:"Economics",description:"Institute of Labor Economics. Germany.",url:"https://iza.org",connections:[319]},
+
+// Trade & commerce
+{id:321,name:"WTO",type:"institutional",category:"Economics",description:"World Trade Organization. International trade rules.",url:"https://wto.org",connections:[59,46]},
+{id:322,name:"UNCTAD",type:"institutional",category:"Economics",description:"UN Conference on Trade and Development.",url:"https://unctad.org",connections:[59,321]},
+
+// Finance & markets
+{id:47,name:"Bloomberg",type:"analysis",category:"Finance",description:"Financial software, data, and media company.",url:"https://bloomberg.com",connections:[16,43,323]},
+{id:323,name:"Financial Times Markets",type:"analysis",category:"Finance",description:"Financial market news and data.",url:"https://markets.ft.com",connections:[16,47]},
+{id:324,name:"Wall Street Journal",type:"analysis",category:"Finance",description:"Business and financial news.",url:"https://wsj.com",connections:[14,47]},
+{id:325,name:"Morningstar",type:"analysis",category:"Finance",description:"Investment research and management.",url:"https://morningstar.com",connections:[47]},
+
+// Central bank research
+{id:326,name:"ECB",type:"institutional",category:"Finance",description:"European Central Bank. Monetary policy and research.",url:"https://ecb.europa.eu",connections:[40,312]},
+{id:327,name:"Bank of England",type:"institutional",category:"Finance",description:"UK central bank. Monetary policy and financial stability.",url:"https://bankofengland.co.uk",connections:[40,326]},
+
+// ============================================================================
+// DATA & STATISTICS (10 sources)
+// ============================================================================
+
+{id:77,name:"Our World in Data",type:"analysis",category:"Data",description:"Research and data on global problems. University of Oxford.",url:"https://ourworldindata.org",connections:[44,43,83]},
+{id:78,name:"Statista",type:"primary",category:"Data",description:"Statistics portal for market and consumer data.",url:"https://statista.com",connections:[77,43]},
+
+// Data science & visualization
+{id:330,name:"Kaggle",type:"community",category:"Data",description:"Data science competition and dataset platform. Google.",url:"https://kaggle.com",connections:[8,331]},
+{id:331,name:"Data.world",type:"community",category:"Data",description:"Collaborative data platform and catalog.",url:"https://data.world",connections:[330,81]},
+
+// Data standards & formats
+{id:332,name:"Schema.org",type:"institutional",category:"Data",description:"Structured data schemas for the web.",url:"https://schema.org",connections:[282]},
+{id:333,name:"JSON-LD",type:"institutional",category:"Data",description:"Linked data format. W3C standard.",url:"https://json-ld.org",connections:[282,332]},
+
+// Open data advocacy
+{id:334,name:"Open Data Institute",type:"institutional",category:"Data",description:"Organization working to build an open, trustworthy data ecosystem.",url:"https://theodi.org",connections:[290,331]},
+{id:335,name:"Open Knowledge Foundation",type:"institutional",category:"Data",description:"Nonprofit promoting open data and knowledge.",url:"https://okfn.org",connections:[334,290]},
+
+// Data journalism
+{id:336,name:"ProPublica Data Store",type:"primary",category:"Data",description:"Free datasets from investigative journalism.",url:"https://propublica.org/datastore",connections:[62,77]},
+{id:337,name:"FiveThirtyEight",type:"analysis",category:"Data",description:"Data journalism and analysis.",url:"https://fivethirtyeight.com",connections:[77,14]},
+
+// ============================================================================
+// HEALTH (15 sources)
+// ============================================================================
+
+{id:143,name:"WHO",type:"institutional",category:"Health",description:"World Health Organization. Global health authority.",url:"https://who.int",connections:[4,5,59,144]},
+
+// Public health agencies
+{id:340,name:"CDC",type:"institutional",category:"Health",description:"US Centers for Disease Control and Prevention.",url:"https://cdc.gov",connections:[143,341]},
+{id:341,name:"ECDC",type:"institutional",category:"Health",description:"European Centre for Disease Prevention and Control.",url:"https://ecdc.europa.eu",connections:[340,143]},
+{id:342,name:"NHS",type:"institutional",category:"Health",description:"UK National Health Service.",url:"https://nhs.uk",connections:[143]},
+
+// Global health initiatives
+{id:343,name:"Gavi",type:"institutional",category:"Health",description:"Global vaccine alliance. Immunization access.",url:"https://gavi.org",connections:[143,344]},
+{id:344,name:"Global Fund",type:"institutional",category:"Health",description:"Partnership to fight AIDS, tuberculosis, and malaria.",url:"https://theglobalfund.org",connections:[143,343]},
+
+// Health research & evidence
+{id:345,name:"Cochrane",type:"institutional",category:"Health",description:"Independent network for health evidence.",url:"https://cochrane.org",connections:[72,143]},
+{id:346,name:"BMJ",type:"primary",category:"Health",description:"British Medical Journal. Peer-reviewed medical research.",url:"https://bmj.com",connections:[5,6]},
+{id:347,name:"JAMA",type:"primary",category:"Health",description:"Journal of the American Medical Association.",url:"https://jamanetwork.com",connections:[5,346]},
+
+// Mental health
+{id:348,name:"NIMH",type:"institutional",category:"Health",description:"National Institute of Mental Health. US research.",url:"https://nimh.nih.gov",connections:[4,143]},
+
+// Rare diseases & patient advocacy
+{id:349,name:"NORD",type:"institutional",category:"Health",description:"National Organization for Rare Disorders.",url:"https://rarediseases.org",connections:[143]},
+
+// Health data & surveillance
+{id:350,name:"HealthMap",type:"primary",category:"Health",description:"Disease outbreak tracking and real-time surveillance.",url:"https://healthmap.org",connections:[143,340]},
+{id:351,name:"Global Health Data Exchange",type:"primary",category:"Health",description:"Catalog of health and demographic datasets. IHME.",url:"https://ghdx.healthdata.org",connections:[143,77]},
+
+// Traditional & complementary medicine
+{id:352,name:"WHO Traditional Medicine",type:"institutional",category:"Health",description:"WHO program on traditional and complementary medicine.",url:"https://who.int/teams/integrated-health-services/traditional-complementary-and-integrative-medicine",connections:[143]},
+
+// Pharmaceutical information
+{id:353,name:"FDA",type:"institutional",category:"Health",description:"US Food and Drug Administration. Drug safety and approval.",url:"https://fda.gov",connections:[340]},
+{id:354,name:"EMA",type:"institutional",category:"Health",description:"European Medicines Agency. EU drug regulation.",url:"https://ema.europa.eu",connections:[353,341]},
+
+// ============================================================================
+// AGRICULTURE & FOOD (10 sources)
+// ============================================================================
+
+{id:144,name:"FAO",type:"institutional",category:"Agriculture",description:"Food and Agriculture Organization of the United Nations.",url:"https://fao.org",connections:[143,145,59]},
+
+// Agricultural research
+{id:360,name:"CGIAR",type:"institutional",category:"Agriculture",description:"Global agricultural research partnership.",url:"https://cgiar.org",connections:[144,361]},
+{id:361,name:"IFPRI",type:"institutional",category:"Agriculture",description:"International Food Policy Research Institute.",url:"https://ifpri.org",connections:[360,144]},
+
+// Food security & nutrition
+{id:362,name:"WFP",type:"institutional",category:"Agriculture",description:"World Food Programme. UN food assistance.",url:"https://wfp.org",connections:[144,59]},
+{id:363,name:"FSIN",type:"institutional",category:"Agriculture",description:"Food Security Information Network. Global analysis.",url:"https://fsinplatform.org",connections:[362,144]},
+
+// Agricultural data
+{id:364,name:"FAOSTAT",type:"primary",category:"Agriculture",description:"FAO statistical database on food and agriculture.",url:"https://fao.org/faostat",connections:[144,77]},
+{id:365,name:"USDA Economic Research",type:"primary",category:"Agriculture",description:"US agricultural economic research and data.",url:"https://ers.usda.gov",connections:[364,39]},
+
+// Sustainable agriculture
+{id:366,name:"IFOAM",type:"institutional",category:"Agriculture",description:"International Federation of Organic Agriculture Movements.",url:"https://ifoam.bio",connections:[144]},
+
+// Seeds & genetic resources
+{id:367,name:"Crop Trust",type:"institutional",category:"Agriculture",description:"Global crop diversity conservation.",url:"https://croptrust.org",connections:[144]},
+
+// Fisheries & aquaculture
+{id:368,name:"FAO Fisheries",type:"institutional",category:"Agriculture",description:"FAO fisheries and aquaculture department.",url:"https://fao.org/fishery",connections:[144]},
+
+// ============================================================================
+// CULTURE & HERITAGE (10 sources)
+// ============================================================================
+
+{id:145,name:"UNESCO",type:"institutional",category:"Culture",description:"UN Educational, Scientific and Cultural Organization.",url:"https://unesco.org",connections:[144,59,60]},
+
+// Cultural heritage preservation
+{id:370,name:"ICOMOS",type:"institutional",category:"Culture",description:"International Council on Monuments and Sites.",url:"https://icomos.org",connections:[145]},
+{id:371,name:"Blue Shield",type:"institutional",category:"Culture",description:"International Committee of the Blue Shield. Cultural heritage protection.",url:"https://theblueshield.org",connections:[370,145]},
+
+// Museums & collections
+{id:48,name:"Metropolitan Museum",type:"institutional",category:"Culture",description:"New York City art museum with encyclopedic collection.",url:"https://metmuseum.org",connections:[49,50,60]},
+{id:49,name:"British Museum",type:"institutional",category:"Culture",description:"London museum covering human history and culture.",url:"https://britishmuseum.org",connections:[48,50]},
+{id:50,name:"Louvre",type:"institutional",category:"Culture",description:"Paris art museum. World's most-visited museum.",url:"https://louvre.fr",connections:[48,49]},
+{id:60,name:"Smithsonian",type:"institutional",category:"Culture",description:"Museum and education complex in Washington DC.",url:"https://si.edu",connections:[22,48,145]},
+
+// Intangible cultural heritage
+{id:372,name:"UNESCO Intangible Heritage",type:"institutional",category:"Culture",description:"Program safeguarding intangible cultural heritage.",url:"https://ich.unesco.org",connections:[145]},
+
+// Digital culture archives
+{id:373,name:"Europeana",type:"institutional",category:"Culture",description:"European digital cultural heritage platform.",url:"https://europeana.eu",connections:[145,21]},
+{id:374,name:"Digital Public Library of America",type:"institutional",category:"Culture",description:"Digital library aggregating US cultural institutions.",url:"https://dp.la",connections:[22,373]},
+
+// ============================================================================
+// HUMAN RIGHTS (10 sources)
+// ============================================================================
+
+{id:146,name:"Amnesty International",type:"institutional",category:"Human Rights",description:"International human rights NGO.",url:"https://amnesty.org",connections:[147,59]},
+{id:147,name:"Human Rights Watch",type:"institutional",category:"Human Rights",description:"International human rights research and advocacy.",url:"https://hrw.org",connections:[146,59]},
+
+// UN human rights
+{id:380,name:"OHCHR",type:"institutional",category:"Human Rights",description:"UN Office of the High Commissioner for Human Rights.",url:"https://ohchr.org",connections:[59,146,147]},
+{id:381,name:"UN Human Rights Council",type:"institutional",category:"Human Rights",description:"UN inter-governmental body on human rights.",url:"https://ohchr.org/en/hr-bodies/hrc",connections:[380,59]},
+
+// Regional human rights
+{id:382,name:"Inter-American Commission",type:"institutional",category:"Human Rights",description:"Inter-American Commission on Human Rights. OAS.",url:"https://iachr.org",connections:[380]},
+{id:383,name:"European Court of Human Rights",type:"institutional",category:"Human Rights",description:"International court. Council of Europe.",url:"https://echr.coe.int",connections:[380]},
+{id:384,name:"African Commission",type:"institutional",category:"Human Rights",description:"African Commission on Human and Peoples' Rights.",url:"https://achpr.au.int",connections:[380,382]},
+
+// Specific rights advocacy
+{id:385,name:"Electronic Frontier Foundation",type:"institutional",category:"Human Rights",description:"Digital rights and civil liberties.",url:"https://eff.org",connections:[146]},
+{id:386,name:"Privacy International",type:"institutional",category:"Human Rights",description:"Privacy and surveillance rights advocacy.",url:"https://privacyinternational.org",connections:[385,146]},
+
+// Refugee & migration rights
+{id:387,name:"UNHCR",type:"institutional",category:"Human Rights",description:"UN Refugee Agency.",url:"https://unhcr.org",connections:[59,380]},
+
+// ============================================================================
+// HUMANITARIAN (8 sources)
+// ============================================================================
+
+{id:148,name:"Red Cross",type:"institutional",category:"Humanitarian",description:"International humanitarian movement. Emergency assistance.",url:"https://icrc.org",connections:[143,59]},
+
+// UN humanitarian
+{id:390,name:"OCHA",type:"institutional",category:"Humanitarian",description:"UN Office for Coordination of Humanitarian Affairs.",url:"https://unocha.org",connections:[59,148]},
+{id:391,name:"UNICEF",type:"institutional",category:"Humanitarian",description:"UN Children's Fund.",url:"https://unicef.org",connections:[59,143,390]},
+
+// Disaster response
+{id:392,name:"ReliefWeb",type:"primary",category:"Humanitarian",description:"UN humanitarian information service. OCHA.",url:"https://reliefweb.int",connections:[390]},
+{id:393,name:"PreventionWeb",type:"primary",category:"Humanitarian",description:"Disaster risk reduction knowledge platform.",url:"https://preventionweb.net",connections:[392]},
+
+// NGO coordination
+{id:394,name:"InterAction",type:"institutional",category:"Humanitarian",description:"Alliance of US-based international NGOs.",url:"https://interaction.org",connections:[148]},
+
+// Humanitarian standards
+{id:395,name:"Sphere Standards",type:"institutional",category:"Humanitarian",description:"Humanitarian charter and minimum standards.",url:"https://spherestandards.org",connections:[148,390]},
+{id:396,name:"CHS Alliance",type:"institutional",category:"Humanitarian",description:"Core Humanitarian Standard partnership.",url:"https://chs-alliance.org",connections:[395]},
+
+// ============================================================================
+// LABOR & WORKERS' RIGHTS (8 sources)
+// ============================================================================
+
+{id:149,name:"ILO",type:"institutional",category:"Labor",description:"International Labour Organization. Workers' rights.",url:"https://ilo.org",connections:[39,59]},
+
+// Trade unions & worker organizations
+{id:400,name:"ITUC",type:"institutional",category:"Labor",description:"International Trade Union Confederation.",url:"https://ituc-csi.org",connections:[149]},
+{id:401,name:"IndustriALL",type:"institutional",category:"Labor",description:"Global union federation for industrial workers.",url:"https://industriall-union.org",connections:[400,149]},
+
+// Labor research
+{id:402,name:"ILO Research",type:"primary",category:"Labor",description:"ILO research department and publications.",url:"https://ilo.org/research",connections:[149,39]},
+
+// Worker safety
+{id:403,name:"ILO Safety and Health",type:"institutional",category:"Labor",description:"Occupational safety and health program.",url:"https://ilo.org/safework",connections:[149,143]},
+
+// Fair labor & supply chains
+{id:404,name:"Fair Labor Association",type:"institutional",category:"Labor",description:"Organization promoting workers' rights in supply chains.",url:"https://fairlabor.org",connections:[149]},
+{id:405,name:"Ethical Trading Initiative",type:"institutional",category:"Labor",description:"Alliance promoting workers' rights in global supply chains.",url:"https://ethicaltrade.org",connections:[404,149]},
+
+// Domestic workers
+{id:406,name:"IDWF",type:"institutional",category:"Labor",description:"International Domestic Workers Federation.",url:"https://idwfed.org",connections:[149,400]},
+
+// ============================================================================
+// EDUCATION (12 sources)
+// ============================================================================
+
 {id:53,name:"MIT OpenCourseWare",type:"institutional",category:"Education",description:"Free MIT course materials.",url:"https://ocw.mit.edu",connections:[54,55]},
-{id:54,name:"Khan Academy",type:"institutional",category:"Education",description:"Free online education.",url:"https://khanacademy.org",connections:[53,55]},
-{id:55,name:"Coursera",type:"institutional",category:"Education",description:"Online learning. University partnerships.",url:"https://coursera.org",connections:[53,54]},
-// SCIENCE COMMUNICATION
-{id:51,name:"Quanta Magazine",type:"analysis",category:"Science",description:"Science journalism. Math, physics, biology.",url:"https://quantamagazine.org",connections:[1,2,52]},
-{id:52,name:"Scientific American",type:"analysis",category:"Science",description:"Popular science. Founded 1845.",url:"https://scientificamerican.com",connections:[51,61]},
-{id:61,name:"National Geographic",type:"analysis",category:"Science",description:"Geography, science, history, culture.",url:"https://nationalgeographic.com",connections:[52,60,84]},
-{id:83,name:"IPCC",type:"primary",category:"Science",description:"Intergovernmental Panel on Climate Change.",url:"https://ipcc.ch",connections:[59,1,84]},
-{id:84,name:"NASA",type:"primary",category:"Science",description:"National Aeronautics and Space Administration.",url:"https://nasa.gov",connections:[83,1,2,61]},
-// POLICY & THINK TANKS
-{id:79,name:"Brookings Institution",type:"analysis",category:"Policy",description:"American public policy research.",url:"https://brookings.edu",connections:[80,70]},
-{id:80,name:"RAND Corporation",type:"analysis",category:"Policy",description:"Global policy think tank.",url:"https://rand.org",connections:[79,70]},
-// BUSINESS
-{id:75,name:"Harvard Business Review",type:"analysis",category:"Business",description:"Management magazine.",url:"https://hbr.org",connections:[17,16,76]},
-{id:76,name:"McKinsey Quarterly",type:"analysis",category:"Business",description:"Management consulting insights.",url:"https://mckinsey.com/quarterly",connections:[75,17]},
-// MAPS & GEOGRAPHY
-{id:85,name:"OpenStreetMap",type:"primary",category:"Maps",description:"Collaborative mapping. Open data.",url:"https://openstreetmap.org",connections:[86]},
-{id:86,name:"Google Maps",type:"institutional",category:"Maps",description:"Web mapping platform.",url:"https://maps.google.com",connections:[85]},
-// SPORTS
-{id:120,name:"FIFA",type:"institutional",category:"Sports",description:"International football association.",url:"https://fifa.com",connections:[121,122]},
+{id:54,name:"Khan Academy",type:"institutional",category:"Education",description:"Free online education platform.",url:"https://khanacademy.org",connections:[53,55]},
+{id:55,name:"Coursera",type:"institutional",category:"Education",description:"Online learning platform with university partnerships.",url:"https://coursera.org",connections:[53,54,410]},
+
+// Additional MOOCs
+{id:410,name:"edX",type:"institutional",category:"Education",description:"Online learning platform. Harvard and MIT.",url:"https://edx.org",connections:[55,53]},
+{id:411,name:"FutureLearn",type:"institutional",category:"Education",description:"UK-based online learning platform.",url:"https://futurelearn.com",connections:[410,55]},
+
+// Education data & research
+{id:412,name:"UNESCO Institute for Statistics",type:"primary",category:"Education",description:"UN statistical agency for education, science, culture.",url:"https://uis.unesco.org",connections:[145,77]},
+{id:413,name:"OECD Education",type:"primary",category:"Education",description:"OECD education statistics and analysis. PISA.",url:"https://oecd.org/education",connections:[46,412]},
+
+// Open educational resources
+{id:414,name:"OER Commons",type:"institutional",category:"Education",description:"Public library of open educational resources.",url:"https://oercommons.org",connections:[53,415]},
+{id:415,name:"Creative Commons",type:"institutional",category:"Education",description:"Nonprofit enabling sharing through open licensing.",url:"https://creativecommons.org",connections:[414,211]},
+
+// Education for development
+{id:416,name:"Global Partnership for Education",type:"institutional",category:"Education",description:"Fund and partnership for education in developing countries.",url:"https://globalpartnership.org",connections:[145,44]},
+
+// Higher education
+{id:417,name:"Times Higher Education",type:"analysis",category:"Education",description:"University rankings and higher education news.",url:"https://timeshighereducation.com",connections:[413]},
+{id:418,name:"QS World University Rankings",type:"analysis",category:"Education",description:"Global university rankings.",url:"https://topuniversities.com",connections:[417]},
+
+// ============================================================================
+// SCIENCE & RESEARCH (15 sources)
+// ============================================================================
+
+{id:51,name:"Quanta Magazine",type:"analysis",category:"Science",description:"Science journalism on math, physics, biology.",url:"https://quantamagazine.org",connections:[1,2,52]},
+{id:52,name:"Scientific American",type:"analysis",category:"Science",description:"Popular science magazine founded 1845.",url:"https://scientificamerican.com",connections:[51,61]},
+{id:61,name:"National Geographic",type:"analysis",category:"Science",description:"Magazine on geography, science, history, culture.",url:"https://nationalgeographic.com",connections:[52,60,84]},
+
+// Climate & environment
+{id:83,name:"IPCC",type:"institutional",category:"Science",description:"Intergovernmental Panel on Climate Change. UN climate science.",url:"https://ipcc.ch",connections:[59,1,84]},
+{id:84,name:"NASA",type:"institutional",category:"Science",description:"National Aeronautics and Space Administration.",url:"https://nasa.gov",connections:[83,1,2,61]},
+{id:420,name:"NOAA",type:"institutional",category:"Science",description:"National Oceanic and Atmospheric Administration.",url:"https://noaa.gov",connections:[84,83]},
+{id:421,name:"ESA",type:"institutional",category:"Science",description:"European Space Agency.",url:"https://esa.int",connections:[84]},
+
+// Environmental research
+{id:422,name:"UNEP",type:"institutional",category:"Science",description:"UN Environment Programme.",url:"https://unep.org",connections:[59,83,144]},
+{id:423,name:"WWF",type:"institutional",category:"Science",description:"World Wildlife Fund. Conservation organization.",url:"https://worldwildlife.org",connections:[422]},
+{id:424,name:"IUCN",type:"institutional",category:"Science",description:"International Union for Conservation of Nature.",url:"https://iucn.org",connections:[422,423]},
+
+// Scientific societies
+{id:425,name:"Royal Society",type:"institutional",category:"Science",description:"UK national academy of sciences. Founded 1660.",url:"https://royalsociety.org",connections:[1,426]},
+{id:426,name:"National Academy of Sciences",type:"institutional",category:"Science",description:"US honorary society of scientists.",url:"https://nasonline.org",connections:[425,2]},
+
+// Physics & astronomy
+{id:427,name:"CERN",type:"institutional",category:"Science",description:"European particle physics research organization.",url:"https://home.cern",connections:[1,3]},
+{id:428,name:"Fermilab",type:"institutional",category:"Science",description:"US particle physics and accelerator laboratory.",url:"https://fnal.gov",connections:[427]},
+
+// Science communication
+{id:429,name:"AAAS",type:"institutional",category:"Science",description:"American Association for the Advancement of Science.",url:"https://aaas.org",connections:[2,426]},
+
+// ============================================================================
+// POLICY RESEARCH (10 sources)
+// ============================================================================
+
+{id:79,name:"Brookings Institution",type:"analysis",category:"Policy",description:"American public policy research organization.",url:"https://brookings.edu",connections:[80,70]},
+{id:80,name:"RAND Corporation",type:"analysis",category:"Policy",description:"American global policy think tank.",url:"https://rand.org",connections:[79,70]},
+
+// International policy
+{id:430,name:"Chatham House",type:"analysis",category:"Policy",description:"Royal Institute of International Affairs. UK.",url:"https://chathamhouse.org",connections:[70,431]},
+{id:431,name:"Carnegie Endowment",type:"analysis",category:"Policy",description:"Global think tank on international affairs.",url:"https://carnegieendowment.org",connections:[430,70]},
+
+// Development policy
+{id:432,name:"ODI",type:"analysis",category:"Policy",description:"Overseas Development Institute. UK development think tank.",url:"https://odi.org",connections:[44,433]},
+{id:433,name:"CGD",type:"analysis",category:"Policy",description:"Center for Global Development. International development policy.",url:"https://cgdev.org",connections:[432,44]},
+
+// Regional policy institutes
+{id:434,name:"SIPRI",type:"analysis",category:"Policy",description:"Stockholm International Peace Research Institute.",url:"https://sipri.org",connections:[430,59]},
+{id:435,name:"CSIS",type:"analysis",category:"Policy",description:"Center for Strategic and International Studies. US.",url:"https://csis.org",connections:[79,431]},
+
+// Climate policy
+{id:436,name:"World Resources Institute",type:"analysis",category:"Policy",description:"Global research on environment and development.",url:"https://wri.org",connections:[83,422]},
+
+// Security & conflict
+{id:437,name:"International Crisis Group",type:"analysis",category:"Policy",description:"Conflict prevention and resolution organization.",url:"https://crisisgroup.org",connections:[431,434]},
+
+// ============================================================================
+// BUSINESS & MANAGEMENT (10 sources)
+// ============================================================================
+
+{id:75,name:"Harvard Business Review",type:"analysis",category:"Business",description:"General management magazine with research.",url:"https://hbr.org",connections:[17,16,76]},
+{id:76,name:"McKinsey Quarterly",type:"analysis",category:"Business",description:"Business journal from McKinsey consulting.",url:"https://mckinsey.com/quarterly",connections:[75,17]},
+
+// Business news
+{id:440,name:"Forbes",type:"analysis",category:"Business",description:"Business magazine and media company.",url:"https://forbes.com",connections:[16,17]},
+{id:441,name:"Fortune",type:"analysis",category:"Business",description:"Business magazine. Rankings and analysis.",url:"https://fortune.com",connections:[440,16]},
+
+// Trade & industry
+{id:442,name:"ICC",type:"institutional",category:"Business",description:"International Chamber of Commerce. Business organization.",url:"https://iccwbo.org",connections:[321]},
+
+// Entrepreneurship
+{id:443,name:"Y Combinator",type:"institutional",category:"Business",description:"Startup accelerator and seed fund.",url:"https://ycombinator.com",connections:[25]},
+{id:444,name:"TechCrunch",type:"analysis",category:"Business",description:"Technology and startup news.",url:"https://techcrunch.com",connections:[443,74]},
+
+// Corporate governance
+{id:445,name:"OECD Corporate Governance",type:"institutional",category:"Business",description:"OECD principles of corporate governance.",url:"https://oecd.org/corporate",connections:[46]},
+
+// Supply chain & logistics
+{id:446,name:"World Economic Forum",type:"institutional",category:"Business",description:"International organization for public-private cooperation.",url:"https://weforum.org",connections:[17,46]},
+
+// Social enterprise
+{id:447,name:"B Lab",type:"institutional",category:"Business",description:"Nonprofit certifying B Corporations for social impact.",url:"https://bcorporation.net",connections:[446]},
+
+// ============================================================================
+// MAPS & GEOGRAPHY (8 sources)
+// ============================================================================
+
+{id:85,name:"OpenStreetMap",type:"community",category:"Maps",description:"Collaborative open geographic database.",url:"https://openstreetmap.org",connections:[86]},
+{id:86,name:"Google Maps",type:"institutional",category:"Maps",description:"Web mapping with navigation and business listings.",url:"https://maps.google.com",connections:[85]},
+
+// Satellite & earth observation
+{id:450,name:"Google Earth",type:"institutional",category:"Maps",description:"Virtual globe with satellite imagery.",url:"https://earth.google.com",connections:[86,451]},
+{id:451,name:"NASA Earth Observatory",type:"primary",category:"Maps",description:"Satellite images and scientific information about Earth.",url:"https://earthobservatory.nasa.gov",connections:[84,450]},
+
+// GIS & spatial data
+{id:452,name:"USGS",type:"primary",category:"Maps",description:"US Geological Survey. Earth science and mapping.",url:"https://usgs.gov",connections:[451,38]},
+{id:453,name:"Esri",type:"institutional",category:"Maps",description:"Geographic information system software company.",url:"https://esri.com",connections:[452,85]},
+
+// Humanitarian mapping
+{id:454,name:"Humanitarian OpenStreetMap",type:"community",category:"Maps",description:"Collaborative mapping for humanitarian response.",url:"https://hotosm.org",connections:[85,390]},
+
+// Historical maps
+{id:455,name:"David Rumsey Map Collection",type:"institutional",category:"Maps",description:"Historical map collection database.",url:"https://davidrumsey.com",connections:[21]},
+
+// ============================================================================
+// SPORTS (15 sources)
+// ============================================================================
+
+{id:120,name:"FIFA",type:"institutional",category:"Sports",description:"International football association.",url:"https://fifa.com",connections:[121,122,460]},
 {id:121,name:"Olympics",type:"institutional",category:"Sports",description:"International Olympic Committee.",url:"https://olympics.com",connections:[120,122]},
-{id:122,name:"ESPN",type:"analysis",category:"Sports",description:"American sports network.",url:"https://espn.com",connections:[120,121,123]},
-{id:123,name:"BBC Sport",type:"analysis",category:"Sports",description:"British sports coverage.",url:"https://bbc.com/sport",connections:[122,12]},
-{id:124,name:"UEFA",type:"institutional",category:"Sports",description:"European football association.",url:"https://uefa.com",connections:[120]},
+{id:122,name:"ESPN",type:"analysis",category:"Sports",description:"American sports broadcasting network.",url:"https://espn.com",connections:[120,121,123]},
+{id:123,name:"BBC Sport",type:"analysis",category:"Sports",description:"BBC sports coverage.",url:"https://bbc.com/sport",connections:[122,12]},
+{id:124,name:"UEFA",type:"institutional",category:"Sports",description:"Union of European Football Associations.",url:"https://uefa.com",connections:[120,460]},
 {id:125,name:"NBA",type:"institutional",category:"Sports",description:"National Basketball Association.",url:"https://nba.com",connections:[122]},
 {id:126,name:"The Athletic",type:"analysis",category:"Sports",description:"Subscription sports journalism.",url:"https://theathletic.com",connections:[122,123]},
-// MUSIC & AUDIO
-{id:150,name:"Spotify",type:"institutional",category:"Music",description:"Music streaming. 500M+ users.",url:"https://spotify.com",connections:[151,152]},
-{id:151,name:"SoundCloud",type:"community",category:"Music",description:"Music and audio platform.",url:"https://soundcloud.com",connections:[150,152]},
-{id:152,name:"Bandcamp",type:"community",category:"Music",description:"Music publishing and discovery.",url:"https://bandcamp.com",connections:[150,151,32]},
+
+// Regional sports bodies
+{id:460,name:"CONCACAF",type:"institutional",category:"Sports",description:"Confederation of North and Central American and Caribbean Football.",url:"https://concacaf.com",connections:[120,124]},
+{id:461,name:"CAF",type:"institutional",category:"Sports",description:"Confederation of African Football.",url:"https://cafonline.com",connections:[120]},
+{id:462,name:"AFC",type:"institutional",category:"Sports",description:"Asian Football Confederation.",url:"https://the-afc.com",connections:[120]},
+{id:463,name:"CONMEBOL",type:"institutional",category:"Sports",description:"South American Football Confederation.",url:"https://conmebol.com",connections:[120]},
+
+// Sports integrity
+{id:464,name:"WADA",type:"institutional",category:"Sports",description:"World Anti-Doping Agency.",url:"https://wada-ama.org",connections:[121,120]},
+{id:465,name:"CAS",type:"institutional",category:"Sports",description:"Court of Arbitration for Sport.",url:"https://tas-cas.org",connections:[121,464]},
+
+// Player representation
+{id:466,name:"FIFPro",type:"institutional",category:"Sports",description:"World players' union representing professional footballers.",url:"https://fifpro.org",connections:[120,149]},
+
+// Sports data & analytics
+{id:467,name:"Opta Sports",type:"primary",category:"Sports",description:"Sports data and analytics provider.",url:"https://optasports.com",connections:[120,122]},
+
+// ============================================================================
+// MUSIC (12 sources)
+// ============================================================================
+
+{id:150,name:"Spotify",type:"institutional",category:"Music",description:"Music streaming with 500M+ users.",url:"https://spotify.com",connections:[151,152]},
+{id:151,name:"SoundCloud",type:"community",category:"Music",description:"Music and podcast streaming.",url:"https://soundcloud.com",connections:[150,152]},
+{id:152,name:"Bandcamp",type:"community",category:"Music",description:"Platform for independent artists.",url:"https://bandcamp.com",connections:[150,151,32]},
+
+// Regional streaming
 {id:153,name:"Anghami",type:"institutional",category:"Music",description:"Arabic music streaming.",url:"https://anghami.com",connections:[150,154]},
 {id:154,name:"Gaana",type:"institutional",category:"Music",description:"Indian music streaming.",url:"https://gaana.com",connections:[153,150,93]},
-// BOOKS & LITERATURE
-{id:87,name:"IMDb",type:"institutional",category:"Entertainment",description:"Film, TV, video game database.",url:"https://imdb.com",connections:[88]},
-{id:88,name:"Letterboxd",type:"community",category:"Entertainment",description:"Social network for film.",url:"https://letterboxd.com",connections:[87,26]},
+
+// Music information
+{id:470,name:"AllMusic",type:"institutional",category:"Music",description:"Music database and review service.",url:"https://allmusic.com",connections:[150]},
+{id:471,name:"Discogs",type:"community",category:"Music",description:"Music database and marketplace.",url:"https://discogs.com",connections:[470,151]},
+
+// Music industry
+{id:472,name:"Billboard",type:"analysis",category:"Music",description:"Music industry news and charts.",url:"https://billboard.com",connections:[150,470]},
+{id:473,name:"Pitchfork",type:"analysis",category:"Music",description:"Music journalism and reviews.",url:"https://pitchfork.com",connections:[472,151]},
+
+// Classical music
+{id:474,name:"IMSLP",type:"institutional",category:"Music",description:"International Music Score Library Project. Public domain scores.",url:"https://imslp.org",connections:[90]},
+
+// Music education
+{id:475,name:"Musictheory.net",type:"institutional",category:"Music",description:"Free music theory resources.",url:"https://musictheory.net",connections:[474]},
+
+// Archive
+{id:476,name:"Internet Archive Audio",type:"institutional",category:"Music",description:"Audio archive including music recordings.",url:"https://archive.org/details/audio",connections:[21,151]},
+
+// ============================================================================
+// ENTERTAINMENT (10 sources)
+// ============================================================================
+
+{id:87,name:"IMDb",type:"institutional",category:"Entertainment",description:"Film, TV, and video game database.",url:"https://imdb.com",connections:[88]},
+{id:88,name:"Letterboxd",type:"community",category:"Entertainment",description:"Social film tracking and reviews.",url:"https://letterboxd.com",connections:[87,26]},
+
+// Film industry
+{id:480,name:"Variety",type:"analysis",category:"Entertainment",description:"Entertainment industry news and analysis.",url:"https://variety.com",connections:[87]},
+{id:481,name:"Hollywood Reporter",type:"analysis",category:"Entertainment",description:"Entertainment industry news.",url:"https://hollywoodreporter.com",connections:[480]},
+
+// Film databases
+{id:482,name:"Rotten Tomatoes",type:"analysis",category:"Entertainment",description:"Film and TV review aggregator.",url:"https://rottentomatoes.com",connections:[87]},
+{id:483,name:"Metacritic",type:"analysis",category:"Entertainment",description:"Review aggregator for media.",url:"https://metacritic.com",connections:[482,87]},
+
+// Film education
+{id:484,name:"Criterion Collection",type:"institutional",category:"Entertainment",description:"Film distribution company. Classic and contemporary films.",url:"https://criterion.com",connections:[87]},
+
+// Gaming
+{id:485,name:"IGN",type:"analysis",category:"Entertainment",description:"Video game and entertainment media.",url:"https://ign.com",connections:[87]},
+
+// Theater
+{id:486,name:"Playbill",type:"analysis",category:"Entertainment",description:"Theater news and information.",url:"https://playbill.com",connections:[480]},
+
+// Animation
+{id:487,name:"Cartoon Brew",type:"analysis",category:"Entertainment",description:"Animation industry news and criticism.",url:"https://cartoonbrew.com",connections:[481]},
+
+// ============================================================================
+// BOOKS & LITERATURE (10 sources)
+// ============================================================================
+
 {id:89,name:"Goodreads",type:"community",category:"Books",description:"Social cataloging for books. 90M+ members.",url:"https://goodreads.com",connections:[26,90]},
-{id:90,name:"Project Gutenberg",type:"institutional",category:"Books",description:"Free public domain eBooks.",url:"https://gutenberg.org",connections:[89,21]},
-// RELIGIOUS & SPIRITUAL
+{id:90,name:"Project Gutenberg",type:"institutional",category:"Books",description:"70,000+ free public domain eBooks.",url:"https://gutenberg.org",connections:[89,21]},
+
+// Book industry
+{id:490,name:"Publishers Weekly",type:"analysis",category:"Books",description:"Book publishing industry news.",url:"https://publishersweekly.com",connections:[89]},
+{id:491,name:"Kirkus Reviews",type:"analysis",category:"Books",description:"Book reviews and literary criticism.",url:"https://kirkusreviews.com",connections:[490,89]},
+
+// Literary journals
+{id:492,name:"Paris Review",type:"analysis",category:"Books",description:"Literary magazine. Interviews and fiction.",url:"https://theparisreview.org",connections:[69,491]},
+{id:493,name:"London Review of Books",type:"analysis",category:"Books",description:"Literary and intellectual magazine.",url:"https://lrb.co.uk",connections:[492,13]},
+
+// Academic books
+{id:494,name:"Google Books",type:"institutional",category:"Books",description:"Book search and preview service.",url:"https://books.google.com",connections:[8,90]},
+{id:495,name:"WorldCat",type:"institutional",category:"Books",description:"Global library catalog.",url:"https://worldcat.org",connections:[22,494]},
+
+// Open access books
+{id:496,name:"OAPEN",type:"institutional",category:"Books",description:"Open Access Publishing in European Networks.",url:"https://oapen.org",connections:[90,209]},
+
+// Audiobooks
+{id:497,name:"LibriVox",type:"community",category:"Books",description:"Free public domain audiobooks.",url:"https://librivox.org",connections:[90]},
+
+// ============================================================================
+// RELIGIOUS & SPIRITUAL (15 sources)
+// ============================================================================
+
 {id:160,name:"Vatican",type:"institutional",category:"Religious",description:"Holy See. Catholic Church headquarters.",url:"https://vatican.va",connections:[161,59]},
-{id:161,name:"Al-Azhar",type:"institutional",category:"Religious",description:"Sunni Islamic university. Cairo.",url:"http://azhar.eg",connections:[160,18]},
-{id:162,name:"World Council of Churches",type:"institutional",category:"Religious",description:"Christian ecumenical organization.",url:"https://oikoumene.org",connections:[160]},
-// MEDICAL & HEALTH
-{id:71,name:"PubMed Central",type:"primary",category:"Academic",description:"Free biomedical literature archive.",url:"https://ncbi.nlm.nih.gov/pmc",connections:[4,5]},
-{id:72,name:"Cochrane Library",type:"primary",category:"Academic",description:"Systematic reviews and meta-analyses.",url:"https://cochranelibrary.com",connections:[4,71,143]},
+{id:161,name:"Al-Azhar",type:"institutional",category:"Religious",description:"Sunni Islamic university in Cairo.",url:"http://azhar.eg",connections:[160,18]},
+{id:162,name:"World Council of Churches",type:"institutional",category:"Religious",description:"Christian ecumenical organization. 350+ churches.",url:"https://oikoumene.org",connections:[160]},
+
+// Islamic organizations
+{id:500,name:"Organization of Islamic Cooperation",type:"institutional",category:"Religious",description:"International organization of Islamic countries.",url:"https://oic-oci.org",connections:[161,59]},
+{id:501,name:"Islamic Relief",type:"institutional",category:"Religious",description:"Faith-inspired humanitarian organization.",url:"https://islamic-relief.org",connections:[500,148]},
+
+// Buddhist organizations
+{id:502,name:"World Buddhist Sangha Council",type:"institutional",category:"Religious",description:"International Buddhist organization.",url:"https://wbsc-online.org",connections:[503]},
+{id:503,name:"Dalai Lama Official",type:"institutional",category:"Religious",description:"Office of His Holiness the Dalai Lama.",url:"https://dalailama.com",connections:[502]},
+
+// Hindu organizations
+{id:504,name:"Hindu American Foundation",type:"institutional",category:"Religious",description:"Hindu advocacy and education.",url:"https://hinduamerican.org",connections:[182]},
+
+// Jewish organizations
+{id:505,name:"World Jewish Congress",type:"institutional",category:"Religious",description:"International federation of Jewish communities.",url:"https://worldjewishcongress.org",connections:[160]},
+
+// Interfaith
+{id:506,name:"Parliament of World's Religions",type:"institutional",category:"Religious",description:"Interfaith organization promoting dialogue.",url:"https://parliamentofreligions.org",connections:[160,162,500]},
+{id:507,name:"United Religions Initiative",type:"institutional",category:"Religious",description:"Interfaith grassroots network.",url:"https://uri.org",connections:[506]},
+
+// Academic study of religion
+{id:508,name:"American Academy of Religion",type:"institutional",category:"Religious",description:"Scholarly society for religious studies.",url:"https://aarweb.org",connections:[217]},
+{id:509,name:"IAHR",type:"institutional",category:"Religious",description:"International Association for the History of Religions.",url:"https://iahr.dk",connections:[508]},
+
+// Religious freedom
+{id:510,name:"USCIRF",type:"institutional",category:"Religious",description:"US Commission on International Religious Freedom.",url:"https://uscirf.gov",connections:[146]},
+
+// Sacred texts
+{id:511,name:"Sacred Texts Archive",type:"institutional",category:"Religious",description:"Digital library of religious texts.",url:"https://sacred-texts.com",connections:[21,90]},
+
+// ============================================================================
+// REFERENCE & KNOWLEDGE (10 sources)
+// ============================================================================
+
+{id:20,name:"Wikipedia",type:"institutional",category:"Reference",description:"Free encyclopedia in 300+ languages.",url:"https://wikipedia.org",connections:[21,22]},
+{id:21,name:"Internet Archive",type:"institutional",category:"Reference",description:"Digital library with Wayback Machine.",url:"https://archive.org",connections:[20,22,90]},
+{id:22,name:"Library of Congress",type:"institutional",category:"Reference",description:"US national library. World's largest.",url:"https://loc.gov",connections:[20,21,60]},
+
+// Encyclopedias
+{id:520,name:"Britannica",type:"institutional",category:"Reference",description:"General knowledge encyclopedia.",url:"https://britannica.com",connections:[20]},
+{id:521,name:"Stanford Encyclopedia of Philosophy",type:"institutional",category:"Reference",description:"Peer-reviewed philosophy encyclopedia.",url:"https://plato.stanford.edu",connections:[203,520]},
+
+// Databases
+{id:522,name:"Wikidata",type:"institutional",category:"Reference",description:"Free knowledge base. Machine-readable data.",url:"https://wikidata.org",connections:[20,332]},
+{id:523,name:"DBpedia",type:"institutional",category:"Reference",description:"Structured data from Wikipedia.",url:"https://dbpedia.org",connections:[20,522]},
+
+// Digital libraries
+{id:524,name:"HathiTrust",type:"institutional",category:"Reference",description:"Digital library of academic libraries.",url:"https://hathitrust.org",connections:[22,7]},
+{id:525,name:"British Library",type:"institutional",category:"Reference",description:"UK national library.",url:"https://bl.uk",connections:[22,49]},
+
+// Citation management
+{id:526,name:"Zotero",type:"institutional",category:"Reference",description:"Free research citation manager.",url:"https://zotero.org",connections:[8,206]},
+
 ];
 
 function toggleLegend() {
@@ -783,7 +1422,7 @@ const categoryZones = {
 const categoryDescriptions = {
   'Academic': 'Peer-reviewed journals, research repositories, and scholarly databases. Primary sources for scientific research across disciplines.',
   'News': 'News agencies, newspapers, and journalism outlets from around the world. Includes wire services, investigative journalism, and international coverage.',
-  'Social': 'Social media platforms and messaging apps. Global and regional networks including Western, Chinese, Indian, and Korean platforms.',
+  'Social': 'Social media platforms and messaging apps. Global and regional networks including Western, Chinese, Indian, Korean, and Russian platforms.',
   'Technology': 'Developer platforms, tech news, and programming communities. Tools and resources for software development and technology discussion.',
   'Government': 'Official government data portals, legislative information, and statistical agencies. Primary sources for policy and civic data.',
   'Economics': 'Economic data, global development statistics, and international financial institutions. Authoritative sources for economic indicators.',

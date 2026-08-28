@@ -46,10 +46,9 @@ h1,h2,h3{font-family:var(--display);font-weight:300;letter-spacing:-.005em;line-
 p{margin:0 0 1.1em}
 p:last-child{margin-bottom:0}
 
-.wrap{max-width:1020px;margin:0 auto;padding:0 24px}
-.band{padding:clamp(56px,8vw,100px) 0}
-.alt{background:var(--alt);max-width:none;padding-left:0;padding-right:0}
-.alt > .grid{max-width:1020px;margin:0 auto;padding:0 24px}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:24px}
+.band{padding-block:clamp(56px,8vw,100px)}
+.alt{background:var(--alt);box-shadow:0 0 0 100vmax var(--alt);clip-path:inset(0 -100vmax)}
 .grid{display:grid;grid-template-columns:170px minmax(0,1fr);gap:0 56px;align-items:start}
 .tag{
   font-family:var(--mono);font-size:.76rem;font-weight:600;letter-spacing:.15em;
@@ -62,7 +61,7 @@ h2::after{content:"";display:block;width:52px;height:2px;background:var(--brand)
 .lede{font-size:1.14em;font-weight:300;line-height:1.5;color:var(--ink)}
 
 /* ── hero ────────────────────────────────── */
-.hero{padding:clamp(44px,6vw,76px) 0 clamp(52px,6.5vw,84px)}
+.hero{padding-block:clamp(44px,6vw,76px) clamp(52px,6.5vw,84px)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);gap:0 58px;align-items:center}
 .hero h1{font-size:clamp(2.15rem,1.1rem + 4.2vw,3.7rem);max-width:15ch;font-weight:300}
 .hero .sub{margin:24px 0 0;max-width:44ch;font-size:clamp(1.16rem,1.04rem + .6vw,1.44rem);line-height:1.5;font-weight:300;color:var(--ink-2)}
@@ -128,7 +127,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--brand-btn);outline-
 .steps{display:grid;gap:14px;margin-bottom:32px}
 .step{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:start;padding:24px 0;border-top:1px solid var(--rule)}
 .step:last-of-type{border-bottom:1px solid var(--rule)}
-.step-n{font-family:var(--mono);font-size:.79rem;font-weight:700;letter-spacing:.09em;color:var(--mark);padding-top:.45em}
+.step-n{font-family:var(--mono);font-size:.79rem;font-weight:700;letter-spacing:.09em;color:var(--mark);padding-top:.45em;min-width:7ch}
 .step h3{font-size:1.28rem;font-weight:600;letter-spacing:0;margin-bottom:.4em}
 .step p{font-size:1em;color:var(--ink-2)}
 
@@ -157,7 +156,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--brand-btn);outline-
 }
 
 /* ── quiz panel ──────────────────────────── */
-.panel{background:var(--panel);color:#DEE2E7;padding:clamp(56px,8vw,104px) 0}
+.panel{background:var(--panel);color:#DEE2E7;padding-block:clamp(56px,8vw,104px)}
 .panel h2{color:#fff}
 .panel .tag{color:#98A0A9}
 .panel .lede{color:#B4BCC4;max-width:52ch}
@@ -251,7 +250,7 @@ footer a{text-decoration:none;color:#fff}
 
   TODO: swap placeholder copy before launch — DO NOT SHIP
 -->
-<!-- (You found it. That one's on purpose. The ones we get called about aren't.) -->
+<!-- (You found it. That one's on purpose. The ones I get called about aren't.) -->
 
 <main>
   <section class="wrap hero">
@@ -261,8 +260,8 @@ footer a{text-decoration:none;color:#fff}
         <p class="sub">AI doesn't make those. No typos, no reversed words, nothing broken on the surface — which is why everyone stopped checking.</p>
         <p class="turn">There's also been no analytics on the checkout page since the March update.</p>
         <div class="hero-foot">
-          <a class="btn" href="https://calendly.com/luke-griles/discover">Book the audit</a>
-          <p class="note">Or take <a href="#check">the 60-second check</a> and see if you'd catch what we catch.</p>
+          <a class="btn" href="https://calendly.com/luke-griles/discover">Book a discovery call</a>
+          <p class="note">Or take <a href="#check">the 60-second check</a> and see if you'd catch what I catch.</p>
         </div>
       </div>
 
@@ -292,14 +291,14 @@ footer a{text-decoration:none;color:#fff}
         <h2>Polish is not the same as correctness.</h2>
         <p class="lede">A typo is a cheap mistake. Someone spots it in an hour, you fix it, nobody's trust moves. LLMs don't make cheap mistakes — they make expensive ones, in the layer nobody reads, behind an interface that looks immaculate.</p>
         <p>They build beautiful websites and exciting companies, and they quietly end client relationships when an errant update strips the tracking off a page. You find out at the quarterly review, in front of the client, with a slide that has no data on it. For three months, nothing looked wrong.</p>
-        <p>We know where to look because we spent ten years on both sides of it — writing the code and answering for the campaign spend.</p>
+        <p>I know where to look because I spent ten years on both sides of it — writing the code and answering for the campaign spend.</p>
       </div>
     </div>
   </section>
 
   <section class="wrap band">
     <div class="grid">
-      <p class="tag">What we <span>catch</span></p>
+      <p class="tag">What I <span>catch</span></p>
       <ul class="fail">
         <li>
           <h3>Comments that ship</h3>
@@ -307,7 +306,7 @@ footer a{text-decoration:none;color:#fff}
         </li>
         <li>
           <h3>Ad spend that buys exposure</h3>
-          <p>€1,000 a month serving an offer into jurisdictions where it isn't compliant — leads you can't legally act on, and a data-protection problem you never priced in.</p>
+          <p>A thousand a month serving an offer into jurisdictions where it isn't compliant — leads you can't legally act on, and a data-protection problem you never priced in.</p>
         </li>
         <li>
           <h3>Conversions that stop counting</h3>
@@ -324,12 +323,12 @@ footer a{text-decoration:none;color:#fff}
         <h2>A doctoral researcher, not a rubber stamp.</h2>
         <div class="bio">
           <figure class="portrait">
-            <img src="https://modernrenaissance.xyz/images/profile.jpg" alt="J Luke Griles" loading="lazy" width="220" height="275">
+            <img src="/images/profile.jpg" alt="J Luke Griles" loading="lazy" width="220" height="275">
             <figcaption>J Luke Griles<span>Doctoral researcher in psychology<br>10 years in marketing &amp; software</span></figcaption>
           </figure>
           <div class="bio-text">
             <p class="lede">Psychology is the discipline that studies how confident, fluent output convinces a reader who has no way to check it.</p>
-            <p>Which is the problem you have. The doctorate isn't decoration on a CV — the methodology is the product. Written protocols, fixed checks run the same way every time, verification by someone other than the author.</p>
+            <p>Which is the problem you have. My doctorate isn't decoration on a CV — the methodology is the product. Written protocols, fixed checks run the same way every time, verification by someone other than the author.</p>
             <p>Set that against <b>ten years of digital marketing and software development</b> — campaigns run, sites built, products shipped, budgets answered for — and you get someone who reads your stack like a dataset and already knows the places fluent work hides its errors.</p>
           </div>
         </div>
@@ -342,7 +341,7 @@ footer a{text-decoration:none;color:#fff}
       <div class="grid">
         <p class="tag">Self-<span>check</span></p>
         <div>
-          <h2>Do you need us?</h2>
+          <h2>Do you need me?</h2>
           <p class="lede">Three snippets. All three shipped to production. Tap the line that's costing the client money.</p>
 
           <div class="quiz" id="quiz" aria-live="polite"></div>
@@ -353,12 +352,12 @@ footer a{text-decoration:none;color:#fff}
 
   <section class="wrap band" id="method">
     <div class="grid">
-      <p class="tag">How we <span>solve it</span></p>
+      <p class="tag">How I <span>solve it</span></p>
       <ul class="method">
         <li>
           <span class="kind">Record</span>
           <h3>Meticulous documentation</h3>
-          <p>Every change written down in language a non-engineer can audit: what moved, why it moved, and what else it touches. If we leave, the record doesn't.</p>
+          <p>Every change written down in language a non-engineer can audit: what moved, why it moved, and what else it touches. If I leave, the record doesn't.</p>
         </li>
         <li>
           <span class="kind">Review</span>
@@ -378,27 +377,33 @@ footer a{text-decoration:none;color:#fff}
     <div class="grid">
       <p class="tag">How it <span>works</span></p>
       <div>
-        <h2>Start with the audit, not the pitch.</h2>
+        <h2>Start with a conversation, not a contract.</h2>
         <div class="steps">
           <div class="step">
             <span class="step-n">First</span>
             <div>
-              <h3>Paid 2-hour audit</h3>
-              <!-- PRICE: add the audit fee here once set, e.g. "€150 · " before the sentence below -->
-              <p>Ten years of development and marketing experience pointed at your code, your campaigns, and your tracking — and a written account of what's actually running. It's yours to keep and act on, whether you hire us or hand it to your own team.</p>
+              <h3>A 30-minute discovery call</h3>
+              <p>Free, and no preparation needed. Tell me what you've shipped and what's been nagging at you. I'll tell you honestly whether there's anything here worth looking at — sometimes there isn't, and that's a useful answer too.</p>
             </div>
           </div>
           <div class="step">
-            <span class="step-n">Then, if you want it</span>
+            <span class="step-n">Then</span>
             <div>
-              <h3>Engagement from 10 hours</h3>
-              <p>We fix what the audit surfaced and put the documentation and monitoring in place that keeps it fixed. Scoped from real findings, so you're buying a known list of work rather than an estimate.</p>
+              <h3>The audit</h3>
+              <p>Ten years of development and marketing experience pointed at your code, your campaigns, and your tracking, and a written account of what's actually running. Yours to keep and act on, whether you hand the work to me or to your own team.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-n">Ongoing</span>
+            <div>
+              <h3>Hourly work or a monthly retainer</h3>
+              <p>I fix what the audit surfaced and put the documentation and monitoring in place that keeps it fixed — scoped from real findings, so you're buying a known list of work rather than an estimate. Entirely optional: plenty of people take the audit and stop there.</p>
             </div>
           </div>
         </div>
         <div class="hero-foot">
-          <a class="btn" href="https://calendly.com/luke-griles/discover">Book the audit</a>
-          <p class="note">You leave the first session with the findings in writing. No obligation past that.</p>
+          <a class="btn" href="https://calendly.com/luke-griles/discover">Book a discovery call</a>
+          <p class="note">Thirty minutes, no cost, no obligation. <a href="https://modernrenaissance.xyz/services/get-started.html">Rates for the work that follows.</a></p>
         </div>
       </div>
     </div>
@@ -409,10 +414,10 @@ footer a{text-decoration:none;color:#fff}
       <p class="tag">Start <span>here</span></p>
       <div>
         <h2>Ship fast. Just know what shipped.</h2>
-        <p class="lede">Bring the site, the campaigns, or both — a decade of building and marketing them says they're rarely the separate problems people assume. Two hours from now you'll know exactly what's under the hood.</p>
+        <p class="lede">Bring the site, the campaigns, or both — a decade of building and marketing them says they're rarely the separate problems people assume. Half an hour on a call is enough to know whether there's a problem worth finding.</p>
         <div class="hero-foot">
-          <a class="btn" href="https://calendly.com/luke-griles/discover">Book the audit</a>
-          <p class="note">Prefer hourly or a monthly retainer? <a href="https://modernrenaissance.xyz/services/get-started.html">See all services and rates.</a></p>
+          <a class="btn" href="https://calendly.com/luke-griles/discover">Book a discovery call</a>
+          <p class="note">Free, 30 minutes. <a href="https://modernrenaissance.xyz/services/get-started.html">See all services and rates.</a></p>
         </div>
       </div>
     </div>
@@ -437,7 +442,7 @@ footer a{text-decoration:none;color:#fff}
           <path d="M11.2 17v-3.9a2.6 2.6 0 0 1 5.2 0V17"/><line x1="11.2" y1="10.4" x2="11.2" y2="13.1"/>
         </svg>
       </a>
-      <a href="https://calendly.com/luke-griles/discover" aria-label="Book the audit">
+      <a href="https://calendly.com/luke-griles/discover" aria-label="Book a discovery call">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3" y="4.6" width="18" height="16.4" rx="2.5"/><line x1="3" y1="9.4" x2="21" y2="9.4"/><line x1="8" y1="2.8" x2="8" y2="6.2"/><line x1="16" y1="2.8" x2="16" y2="6.2"/>
         </svg>
@@ -514,7 +519,7 @@ const VERDICTS = [
   { min: 2, h: "Two out of three.",
     p: "Which is also roughly what gets caught at 11pm on a Friday, on the fourth review of the week, by someone who shipped it themselves." },
   { min: 0, h: "That's exactly the point.",
-    p: "None of these look broken. All three shipped, passed review, and ran in production. This is the layer we're paid to read." }
+    p: "None of these look broken. All three shipped, passed review, and ran in production. This is the layer I'm paid to read." }
 ];
 
 const quiz = document.getElementById("quiz");
@@ -577,7 +582,7 @@ function verdict(){
       <p class="score">Caught<b>${score} / 3</b></p>
       <h3>${v.h}</h3>
       <p>${v.p}</p>
-      <a class="btn light" href="https://calendly.com/luke-griles/discover">Book the audit</a>
+      <a class="btn light" href="https://calendly.com/luke-griles/discover">Book a discovery call</a>
       <button class="restart" type="button">Run the cases again</button>
     </div>`;
   quiz.querySelector(".restart").addEventListener("click", () => { idx = 0; score = 0; render(); });

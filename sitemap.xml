@@ -74,13 +74,19 @@
     <loc>https://www.modernrenaissance.xyz/quote-wall.html</loc>
   </url>
   <url>
-    <loc>https://www.modernrenaissance.xyz/self-reliance/the-new-economy.html</loc>
+    <loc>https://www.modernrenaissance.xyz/insights/self-reliance/the-new-economy.html</loc>
   </url>
   <url>
-    <loc>https://www.modernrenaissance.xyz/motivation/finding-your-place.html</loc>
+    <loc>https://www.modernrenaissance.xyz/insights/motivation/finding-your-place.html</loc>
   </url>
   <url>
     <loc>https://www.modernrenaissance.xyz/services/get-started.html</loc>
+  </url>
+  <url>
+    <loc>https://www.modernrenaissance.xyz/services/ai-audit.html</loc>
+  </url>
+  <url>
+    <loc>https://www.modernrenaissance.xyz/global-information-network.html</loc>
   </url>
 </urlset>
 <!--Created using XmlSitemapGenerator.org - Free HTML, RSS and XML sitemap generator-->

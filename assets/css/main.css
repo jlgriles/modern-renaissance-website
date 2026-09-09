@@ -73,6 +73,10 @@ input, select, textarea {
 	appearance: none;
 }
 
+#cc-banner button {
+	color:#f2f2f2 !important
+}
+
 /* Menu */
 
 		#header nav {

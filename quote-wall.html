@@ -1,15 +1,28 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW11JF67DB"></script>
+		<!-- 1. Consent default — MUST be first, before gtag.js loads -->
 		<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-
-		gtag('config', 'G-ZW11JF67DB');
+		gtag('consent', 'default', {
+			ad_storage: 'denied',
+			ad_user_data: 'denied',
+			ad_personalization: 'denied',
+			analytics_storage: 'denied',
+			wait_for_update: 500
+		});
 		</script>
+
+		<!-- 2. GA4 -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW11JF67DB"></script>
+		<script>
+		gtag('js', new Date());
+		gtag('config', 'G-ZW11JF67DB', { anonymize_ip: true });
+		</script>
+
+		<!-- 3. Consent banner (after the above, order relative to other page scripts doesn't matter) -->
+		<script src="assets/js/cookie-consent.js" defer></script>
 		<title>Quote Wall | Jacob Luke Griles</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />

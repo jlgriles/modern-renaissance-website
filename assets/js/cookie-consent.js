@@ -61,7 +61,7 @@
     el.setAttribute('aria-live', 'polite');
     el.setAttribute('aria-label', 'Cookie consent');
     el.innerHTML =
-      '<p id="cc-text">This site collects minimal tracking data.</p>' +
+      '<p id="cc-text">Curious how many people find this site? Same. Anonymous analytics only.</p>' +
       '<div id="cc-actions">' +
       '<button id="cc-reject" type="button">Reject</button>' +
       '<button id="cc-accept" type="button">Accept</button>' +
@@ -80,6 +80,7 @@
       'padding:8px 16px;font:inherit;background:transparent;color:#f2f2f2}' +
       '#cc-accept{background:#f2f2f2;color:#1a1a1a;border-color:#f2f2f2}' +
       '@media (max-width:480px){#cc-banner{flex-direction:column;align-items:stretch}' +
+      '#cc-text{flex:1 1 auto}' +
       '#cc-actions{justify-content:flex-end}}';
     document.head.appendChild(style);
 
